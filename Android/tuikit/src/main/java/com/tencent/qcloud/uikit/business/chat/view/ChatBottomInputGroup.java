@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.text.Editable;
@@ -131,6 +130,8 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
         faceBtn = findViewById(R.id.face_btn);
         faceBtn.setOnClickListener(this);
         moreBtn = findViewById(R.id.more_btn);
+        //guilin changed,always GONE
+        moreBtn.setVisibility(GONE);
         moreBtn.setOnClickListener(this);
         sendBtn = findViewById(R.id.send_btn);
         sendBtn.setOnClickListener(this);
@@ -658,7 +659,10 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
         } else {
             sendAble = false;
             sendBtn.setVisibility(View.GONE);
-            moreBtn.setVisibility(View.VISIBLE);
+
+            //moreBtn.setVisibility(View.VISIBLE);
+            //guilin change ，always gone
+            moreBtn.setVisibility(View.GONE);
 
         }
     }
