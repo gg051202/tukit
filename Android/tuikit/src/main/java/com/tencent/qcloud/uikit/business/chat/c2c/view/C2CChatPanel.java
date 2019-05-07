@@ -9,11 +9,12 @@ import com.tencent.qcloud.uikit.api.chat.IChatPanel;
 import com.tencent.qcloud.uikit.business.chat.c2c.model.C2CChatInfo;
 import com.tencent.qcloud.uikit.business.chat.c2c.model.C2CChatManager;
 import com.tencent.qcloud.uikit.business.chat.c2c.presenter.C2CChatPresenter;
-import com.tencent.qcloud.uikit.common.component.action.PopActionClickListener;
-import com.tencent.qcloud.uikit.common.component.action.PopMenuAction;
 import com.tencent.qcloud.uikit.business.chat.model.MessageInfo;
 import com.tencent.qcloud.uikit.business.chat.view.ChatPanel;
 import com.tencent.qcloud.uikit.business.chat.view.widget.ChatAdapter;
+import com.tencent.qcloud.uikit.common.IUIKitSendMessageSuccessCallBack;
+import com.tencent.qcloud.uikit.common.component.action.PopActionClickListener;
+import com.tencent.qcloud.uikit.common.component.action.PopMenuAction;
 import com.tencent.qcloud.uikit.common.component.audio.UIKitAudioArmMachine;
 import com.tencent.qcloud.uikit.common.component.titlebar.PageTitleBar;
 
@@ -25,6 +26,7 @@ public class C2CChatPanel extends ChatPanel implements IChatPanel {
 
     private C2CChatPresenter mPresenter;
     private C2CChatInfo mBaseInfo;
+    private IUIKitSendMessageSuccessCallBack mIUIKitSendMessageSuccessCallBack;
 
     public C2CChatPanel(Context context) {
         super(context);
@@ -118,5 +120,13 @@ public class C2CChatPanel extends ChatPanel implements IChatPanel {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         exitChat();
+    }
+
+    public IUIKitSendMessageSuccessCallBack getIUIKitSendMessageSuccessCallBack() {
+        return mIUIKitSendMessageSuccessCallBack;
+    }
+
+    public void setIUIKitSendMessageSuccessCallBack(IUIKitSendMessageSuccessCallBack IUIKitSendMessageSuccessCallBack) {
+        mIUIKitSendMessageSuccessCallBack = IUIKitSendMessageSuccessCallBack;
     }
 }

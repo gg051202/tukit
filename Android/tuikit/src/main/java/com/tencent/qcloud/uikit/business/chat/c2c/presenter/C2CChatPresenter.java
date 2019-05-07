@@ -9,6 +9,8 @@ import com.tencent.qcloud.uikit.common.BackgroundTasks;
 import com.tencent.qcloud.uikit.business.chat.model.MessageInfo;
 import com.tencent.qcloud.uikit.common.utils.UIUtils;
 
+import static com.tencent.qcloud.uikit.business.chat.model.MessageInfo.MSG_STATUS_SEND_SUCCESS;
+
 
 public class C2CChatPresenter {
 
@@ -41,16 +43,24 @@ public class C2CChatPresenter {
         });
     }
 
-    public void sendC2CMessage(MessageInfo message, boolean reSend) {
+    public void sendC2CMessage(final MessageInfo message, boolean reSend) {
+        System.out.println("aaa");
         mChatManager.sendC2CMessage(message, reSend, new IUIKitCallBack() {
             @Override
             public void onSuccess(Object data) {
+                //监听消息发送成功
+                if (message.getStatus() == MSG_STATUS_SEND_SUCCESS) {
+                    if (mChatPanel.getIUIKitSendMessageSuccessCallBack() != null) {
+                        mChatPanel.getIUIKitSendMessageSuccessCallBack().success();
+                    }
+                }
                 BackgroundTasks.getInstance().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         mChatPanel.scrollToEnd();
                     }
                 });
+
             }
 
             @Override
