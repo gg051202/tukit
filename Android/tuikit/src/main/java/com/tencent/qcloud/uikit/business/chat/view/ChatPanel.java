@@ -40,7 +40,7 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
     protected PageTitleBar mTitleBar;
     protected ChatListView mChatList;
     protected IChatAdapter mAdapter;
-    protected ChatBottomInputGroup mInputGroup;
+    public ChatBottomInputGroup mInputGroup;
     protected ListView mItemPopMenuList;
 
     /**
@@ -333,5 +333,6 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
     protected abstract void loadMessages();
 
     protected abstract void initPopActions(MessageInfo msg);
+
 
 }

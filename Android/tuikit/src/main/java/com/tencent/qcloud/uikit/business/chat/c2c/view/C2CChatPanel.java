@@ -129,4 +129,8 @@ public class C2CChatPanel extends ChatPanel implements IChatPanel {
     public void setIUIKitSendMessageSuccessCallBack(IUIKitSendMessageSuccessCallBack IUIKitSendMessageSuccessCallBack) {
         mIUIKitSendMessageSuccessCallBack = IUIKitSendMessageSuccessCallBack;
     }
+
+    public C2CChatInfo getBaseInfo() {
+        return mBaseInfo;
+    }
 }
