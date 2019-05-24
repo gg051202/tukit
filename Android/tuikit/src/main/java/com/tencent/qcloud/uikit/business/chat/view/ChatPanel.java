@@ -219,11 +219,24 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
             ((ChatAdapter) mAdapter).setChatListEvent(mEvent);
     }
 
+    /**
+     * 设置自己的头像
+     */
     public void setSelfAvatarUrl(String url) {
         if (mAdapter != null && mAdapter instanceof ChatAdapter) {
             ((ChatAdapter) mAdapter).setSelfAvatarUrl(url);
         }
     }
+
+    /**
+     * 设置对方的头像
+     */
+    public void setAcrossAvatarUrl(String url) {
+        if (mAdapter != null && mAdapter instanceof ChatAdapter) {
+            ((ChatAdapter) mAdapter).setAcrossAvatarUrl(url);
+        }
+    }
+
 
     @Override
     public void setChatListEvent(ChatListEvent event) {

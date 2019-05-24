@@ -81,7 +81,14 @@ public class ChatAdapter extends IChatAdapter {
     private static final int audio_max_width = UIUtils.getPxByDp(250);
     private static final int headerViewType = -99;
     private static List<String> downloadEles = new ArrayList();
+    /**
+     * 自己的头像URL
+     */
     private String selfAvatarUrl;
+    /**
+     * 对方的头像url
+     */
+    private String acrossAvatarUrl;
 
 
     @NonNull
@@ -266,10 +273,18 @@ public class ChatAdapter extends IChatAdapter {
         if (mRequestOptions == null) {
             mRequestOptions = new RequestOptions().transform(new CircleCrop());
         }
-        Glide.with(holder.itemView.getContext())
-                .load(selfAvatarUrl)
-                .apply(mRequestOptions)
-                .into(chatHolder.userIcon);
+        if (msg.isSelf()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(!TextUtils.isEmpty(selfAvatarUrl) ? selfAvatarUrl : R.drawable.default_head)
+                    .apply(mRequestOptions)
+                    .into(chatHolder.userIcon);
+        } else {
+            Glide.with(holder.itemView.getContext())
+                    .load(!TextUtils.isEmpty(acrossAvatarUrl) ? acrossAvatarUrl : R.drawable.default_head)
+                    .apply(mRequestOptions)
+                    .into(chatHolder.userIcon);
+        }
+
 
         switch (getItemViewType(position)) {
             case MessageInfo.MSG_TYPE_TEXT:
@@ -790,5 +805,9 @@ public class ChatAdapter extends IChatAdapter {
 
     public void setSelfAvatarUrl(String selfAvatarUrl) {
         this.selfAvatarUrl = selfAvatarUrl;
+    }
+
+    public void setAcrossAvatarUrl(String acrossAvatarUrl) {
+        this.acrossAvatarUrl = acrossAvatarUrl;
     }
 }
