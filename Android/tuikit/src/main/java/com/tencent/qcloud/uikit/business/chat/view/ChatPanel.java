@@ -219,6 +219,12 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
             ((ChatAdapter) mAdapter).setChatListEvent(mEvent);
     }
 
+    public void setSelfAvatarUrl(String url) {
+        if (mAdapter != null && mAdapter instanceof ChatAdapter) {
+            ((ChatAdapter) mAdapter).setSelfAvatarUrl(url);
+        }
+    }
+
     @Override
     public void setChatListEvent(ChatListEvent event) {
         this.mEvent = event;

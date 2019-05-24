@@ -14,6 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMFaceElem;
 import com.tencent.imsdk.TIMFileElem;
@@ -37,13 +40,11 @@ import com.tencent.qcloud.uikit.business.chat.view.ChatListView;
 import com.tencent.qcloud.uikit.common.BackgroundTasks;
 import com.tencent.qcloud.uikit.common.UIKitConstants;
 import com.tencent.qcloud.uikit.common.component.audio.UIKitAudioArmMachine;
-import com.tencent.qcloud.uikit.common.component.audio.UIKitAudioMachine;
 import com.tencent.qcloud.uikit.common.component.face.FaceManager;
 import com.tencent.qcloud.uikit.common.component.picture.imageEngine.impl.GlideEngine;
 import com.tencent.qcloud.uikit.common.component.video.VideoViewActivity;
 import com.tencent.qcloud.uikit.common.utils.DateTimeUtil;
 import com.tencent.qcloud.uikit.common.utils.FileUtil;
-import com.tencent.qcloud.uikit.common.utils.ImageUtil;
 import com.tencent.qcloud.uikit.common.utils.UIUtils;
 import com.tencent.qcloud.uikit.common.widget.photoview.PhotoViewActivity;
 
@@ -62,6 +63,7 @@ public class ChatAdapter extends IChatAdapter {
     private ChatListEvent mListEvent;
 
     private MessageInterceptor mInterceptor;
+    private RequestOptions mRequestOptions;
 
     public void setChatListEvent(ChatListEvent mListEvent) {
         this.mListEvent = mListEvent;
@@ -79,6 +81,7 @@ public class ChatAdapter extends IChatAdapter {
     private static final int audio_max_width = UIUtils.getPxByDp(250);
     private static final int headerViewType = -99;
     private static List<String> downloadEles = new ArrayList();
+    private String selfAvatarUrl;
 
 
     @NonNull
@@ -255,11 +258,18 @@ public class ChatAdapter extends IChatAdapter {
         }
 
 
-        if (mRecycleView.getUserChatIcon() != null) {
-            chatHolder.userIcon.setDynamicChatIconView(mRecycleView.getUserChatIcon());
+//        if (mRecycleView.getUserChatIcon() != null) {
+//            chatHolder.userIcon.setDynamicChatIconView(mRecycleView.getUserChatIcon());
+//        }
+//        chatHolder.userIcon.invokeInformation(msg);
+//        chatHolder.userIcon.setDefaultImageResId(R.drawable.default_head);
+        if (mRequestOptions == null) {
+            mRequestOptions = new RequestOptions().transform(new CircleCrop());
         }
-        chatHolder.userIcon.invokeInformation(msg);
-        chatHolder.userIcon.setDefaultImageResId(R.drawable.default_head);
+        Glide.with(holder.itemView.getContext())
+                .load(selfAvatarUrl)
+                .apply(mRequestOptions)
+                .into(chatHolder.userIcon);
 
         switch (getItemViewType(position)) {
             case MessageInfo.MSG_TYPE_TEXT:
@@ -776,5 +786,9 @@ public class ChatAdapter extends IChatAdapter {
             chatTime = itemView.findViewById(R.id.chat_time);
             tips = itemView.findViewById(R.id.chat_tips);
         }
+    }
+
+    public void setSelfAvatarUrl(String selfAvatarUrl) {
+        this.selfAvatarUrl = selfAvatarUrl;
     }
 }
