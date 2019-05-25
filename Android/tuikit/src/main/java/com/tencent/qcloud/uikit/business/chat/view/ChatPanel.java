@@ -317,7 +317,9 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
 
             @Override
             public void onUserIconClick(View view, int position, MessageInfo messageInfo) {
-//                UIUtils.toastLongMessage("头像点击");
+                if(mOnUserIconClickListener!=null){
+                    mOnUserIconClickListener.click();
+                }
             }
         });
         mTitleBar.setLeftClick(new OnClickListener() {
@@ -354,4 +356,13 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
     protected abstract void initPopActions(MessageInfo msg);
 
 
+    public interface OnUserIconClickListener {
+        void click();
+    }
+
+    private OnUserIconClickListener mOnUserIconClickListener;
+
+    public void setOnUserIconClickListener(OnUserIconClickListener l) {
+        mOnUserIconClickListener = l;
+    }
 }
