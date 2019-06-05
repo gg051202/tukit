@@ -317,8 +317,8 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
 
             @Override
             public void onUserIconClick(View view, int position, MessageInfo messageInfo) {
-                if(mOnUserIconClickListener!=null){
-                    mOnUserIconClickListener.click();
+                if (mOnUserIconClickListener != null) {
+                    mOnUserIconClickListener.click(messageInfo.isSelf());
                 }
             }
         });
@@ -357,7 +357,7 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
 
 
     public interface OnUserIconClickListener {
-        void click();
+        void click(boolean isSelf);
     }
 
     private OnUserIconClickListener mOnUserIconClickListener;

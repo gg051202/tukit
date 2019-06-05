@@ -717,8 +717,6 @@ public class WheelTime {
         }
         StringBuilder sb = new StringBuilder();
         if (currentYear == startYear) {
-           /* int i = wv_month.getCurrentItem() + startMonth;
-            System.out.println("i:" + i);*/
             if ((wv_month.getCurrentItem() + startMonth) == startMonth) {
                 sb.append((wv_year.getCurrentItem() + startYear)).append("-")
                         .append((wv_month.getCurrentItem() + startMonth)).append("-")
