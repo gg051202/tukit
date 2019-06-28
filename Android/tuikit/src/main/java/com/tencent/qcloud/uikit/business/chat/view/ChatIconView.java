@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 
-public class ChatIconView extends android.support.v7.widget.AppCompatImageView {
+public class ChatIconView extends androidx.appcompat.widget.AppCompatImageView {
 
 
     public ChatIconView(Context context, AttributeSet attrs) {

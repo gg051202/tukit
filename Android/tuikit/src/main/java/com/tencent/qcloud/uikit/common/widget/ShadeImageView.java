@@ -10,14 +10,12 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.widget.ImageView;
 
 import com.tencent.qcloud.uikit.common.utils.UIUtils;
-
-import java.util.HashMap;
 
 
 @SuppressLint("AppCompatCustomView")

@@ -3,7 +3,7 @@ package com.tencent.qcloud.uikit.common.utils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.support.v7.view.ContextThemeWrapper;
+import androidx.appcompat.view.ContextThemeWrapper;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;

@@ -1,10 +1,9 @@
 package com.tencent.qcloud.uikit.common;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.tencent.qcloud.uikit.api.contact.IContactDataProvider;
 import com.tencent.qcloud.uikit.common.widget.InfoCacheView;
-import com.tencent.qcloud.uikit.common.widget.UIKitTextView;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

@@ -6,12 +6,11 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.widget.ListViewCompat;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.widget.ListViewCompat;
+
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import com.tencent.qcloud.uikit.R;

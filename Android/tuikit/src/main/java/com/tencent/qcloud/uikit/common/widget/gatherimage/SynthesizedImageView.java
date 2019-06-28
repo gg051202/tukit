@@ -3,7 +3,7 @@ package com.tencent.qcloud.uikit.common.widget.gatherimage;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 
 import com.tencent.qcloud.uikit.R;

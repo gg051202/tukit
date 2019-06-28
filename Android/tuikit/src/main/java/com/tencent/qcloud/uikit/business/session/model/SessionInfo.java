@@ -1,7 +1,7 @@
 package com.tencent.qcloud.uikit.business.session.model;
 
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.tencent.qcloud.uikit.business.chat.model.MessageInfo;
 

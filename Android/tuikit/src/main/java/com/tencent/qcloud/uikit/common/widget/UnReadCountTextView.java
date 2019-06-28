@@ -11,7 +11,7 @@ import android.util.TypedValue;
 import com.tencent.qcloud.uikit.common.utils.UIUtils;
 
 
-public class UnReadCountTextView extends android.support.v7.widget.AppCompatTextView {
+public class UnReadCountTextView extends androidx.appcompat.widget.AppCompatTextView {
     int normalSize = UIUtils.getPxByDp(16);
     Paint paint;
 

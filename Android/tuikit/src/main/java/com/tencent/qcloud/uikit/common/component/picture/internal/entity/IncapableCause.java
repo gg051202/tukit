@@ -16,8 +16,8 @@
 package com.tencent.qcloud.uikit.common.component.picture.internal.entity;
 
 import android.content.Context;
-import android.support.annotation.IntDef;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.IntDef;
+import androidx.fragment.app.FragmentActivity;
 import android.widget.Toast;
 
 import com.tencent.qcloud.uikit.common.component.picture.internal.ui.widget.IncapableDialog;

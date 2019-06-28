@@ -10,11 +10,10 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 
 import com.tencent.qcloud.uikit.TUIKit;
 import com.tencent.qcloud.uikit.common.UIKitConstants;
-import com.tencent.qcloud.uikit.common.widget.gatherimage.BitmapUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

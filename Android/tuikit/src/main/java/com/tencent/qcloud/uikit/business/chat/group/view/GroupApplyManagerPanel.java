@@ -2,7 +2,7 @@ package com.tencent.qcloud.uikit.business.chat.group.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;

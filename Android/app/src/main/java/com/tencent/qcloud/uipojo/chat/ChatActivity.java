@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.tencent.qcloud.tim.tuikit.R;
 import com.tencent.qcloud.uikit.business.chat.c2c.model.C2CChatManager;

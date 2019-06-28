@@ -17,7 +17,7 @@
 package com.tencent.qcloud.uikit.common.component.picture.internal.entity;
 
 import android.content.pm.ActivityInfo;
-import android.support.annotation.StyleRes;
+import androidx.annotation.StyleRes;
 
 import com.tencent.qcloud.uikit.R;
 import com.tencent.qcloud.uikit.common.component.picture.MimeType;

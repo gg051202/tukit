@@ -1,6 +1,6 @@
 package com.tencent.qcloud.uikit.api.chat;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.tencent.qcloud.uikit.business.chat.model.MessageInfo;
 

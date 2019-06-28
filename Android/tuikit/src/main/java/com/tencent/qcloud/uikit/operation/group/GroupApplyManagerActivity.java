@@ -2,7 +2,7 @@ package com.tencent.qcloud.uikit.operation.group;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.tencent.qcloud.uikit.R;
 import com.tencent.qcloud.uikit.business.chat.group.view.GroupApplyManagerPanel;

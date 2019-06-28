@@ -16,7 +16,7 @@
 package com.tencent.qcloud.uikit.common.component.picture.internal.ui;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.tencent.qcloud.uikit.common.component.picture.internal.entity.Item;
 import com.tencent.qcloud.uikit.common.component.picture.internal.entity.SelectionSpec;

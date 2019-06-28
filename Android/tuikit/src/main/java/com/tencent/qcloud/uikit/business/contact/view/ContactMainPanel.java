@@ -3,7 +3,7 @@ package com.tencent.qcloud.uikit.business.contact.view;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;

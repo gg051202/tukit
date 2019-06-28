@@ -2,7 +2,7 @@ package com.tencent.qcloud.uikit.operation.c2c;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.SearchView;
