@@ -73,13 +73,13 @@ public class ChatAdapter extends IChatAdapter {
         this.mInterceptor = interceptor;
     }
 
-    private static final int width = UIUtils.getPxByDp(100);
-    private static final int height = UIUtils.getPxByDp(160);
-    private static final int normal = UIUtils.getPxByDp(120);
+    private final int width;
+    private final int height;
+    private final int normal;
 
-    private static final int audio_min_width = UIUtils.getPxByDp(60);
-    private static final int audio_max_width = UIUtils.getPxByDp(250);
-    private static final int headerViewType = -99;
+    private final int audio_min_width;
+    private final int audio_max_width;
+    private final int headerViewType = -99;
     private static List<String> downloadEles = new ArrayList();
     /**
      * 自己的头像URL
@@ -90,6 +90,13 @@ public class ChatAdapter extends IChatAdapter {
      */
     private String acrossAvatarUrl;
 
+    public ChatAdapter() {
+        this.width = UIUtils.getPxByDp(100);
+        this.height = UIUtils.getPxByDp(160);
+        this.normal = UIUtils.getPxByDp(120);
+        this.audio_min_width = UIUtils.getPxByDp(60);
+        this.audio_max_width = UIUtils.getPxByDp(250);
+    }
 
     @NonNull
     @Override

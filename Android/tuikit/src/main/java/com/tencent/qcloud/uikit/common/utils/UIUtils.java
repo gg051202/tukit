@@ -51,6 +51,9 @@ public class UIUtils {
 
 
     public static int getPxByDp(int dp) {
+        if (TUIKit.getAppContext() == null) {
+            return dp * 2;
+        }
         float scale = TUIKit.getAppContext().getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
