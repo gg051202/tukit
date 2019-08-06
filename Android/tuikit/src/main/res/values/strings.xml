@@ -26,17 +26,12 @@
     <string name="sure">确定</string>
     <string name="album_name_all">全部</string>
     <string name="button_preview">预览</string>
-    <string name="button_apply_default">使用</string>
-    <string name="button_apply">使用(%1$d)</string>
     <string name="button_back">返回</string>
     <string name="photo_grid_capture">拍一张</string>
     <string name="empty_text">还没有图片或视频</string>
     <string name="button_ok">我知道了</string>
 
-    <string name="error_over_count_default">您已经达到最大选择数量</string>
     <string name="error_over_count">最多只能选择 %1$d 个文件</string>
-    <string name="error_under_quality">图片质量太低</string>
-    <string name="error_over_quality">图片质量太高</string>
     <string name="error_file_type">不支持的文件类型</string>
     <string name="error_type_conflict">不能同时选择图片和视频</string>
     <string name="error_no_video_activity">没有支持视频预览的应用</string>
@@ -45,14 +40,6 @@
     <string name="button_original">原图</string>
     <string name="button_sure_default">确定</string>
     <string name="button_sure">确定(%1$d)</string>
-    <string name="face_recently">Recently</string>
-    <string name="face_Emoji">Emoji</string>
-    <string name="face_set_one">Default</string>
-
-    <string name="action_photo">图片</string>
-    <string name="action_video">视频</string>
-    <string name="action_location">位置</string>
-    <string name="action_file">文件</string>
 
     <string name="un_download">未下载</string>
     <string name="downloaded">已下载</string>
@@ -72,12 +59,10 @@
     <string name="add_to_blacklist">加入黑名单</string>
     <string name="add_rule">添加好友认证方式</string>
     <string name="settings">设置</string>
-    <string name="logout">注销</string>
     <string name="modify_nick_name">修改昵称</string>
     <string name="modify_signature">修改个性签名</string>
 
     <string name="group_members">群成员</string>
-    <string name="group_join_apply">申请列表</string>
     <string name="group_type">群类型</string>
     <string name="add_group_member">增加成员</string>
     <string name="remove_group_member">移除成员</string>
@@ -86,7 +71,6 @@
     <string name="dissolve">解散该群</string>
     <string name="modify_group_name">修改群名称</string>
     <string name="modify_group_notice">修改群公告</string>
-    <string name="record_cancel_tips">手指上滑，取消发送</string>
     <string name="contacts">联系人</string>
 
 
@@ -120,7 +104,6 @@
     <string name="modify_group_notice_success">修改群通知成功</string>
     <string name="exit_group">退出群聊</string>
     <string name="modify_nickname_success">修改昵称成功</string>
-    <string name="input_group_id_empty_tips">群组ID不能为空</string>
     <string name="input_group_type_empty_tips">请选择群类型</string>
     <string name="input_group_member_empty_tips">请选择群成员</string>
     <string name="join_group_type_empty_tips">请选择群加群方式</string>

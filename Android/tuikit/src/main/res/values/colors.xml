@@ -19,7 +19,6 @@
     <color name="main_bg_color">#f2f2f2</color>
     <color name="main_fg_color">#ffffff</color>
     <color name="item_split_color">#cccccc</color>
-    <color name="title_bar_bg_color">#ffffff</color>
     <color name="title_bar_font_color">#016fff</color>
 
     <color name="text_color_black">#000</color>

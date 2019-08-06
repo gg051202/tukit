@@ -178,7 +178,7 @@ public class TUIKit {
         TIMUserConfigMsgExt ext = new TIMUserConfigMsgExt(userConfig);
         ext.setMessageRevokedListener(UIKitMessageRevokedManager.getInstance());
         // 禁用自动上报，通过调用已读上报接口来实现已读功能
-        ext.setAutoReportEnabled(false);
+        ext.setReadReceiptEnabled(false);
         TIMManager.getInstance().setUserConfig(ext);
 
     }

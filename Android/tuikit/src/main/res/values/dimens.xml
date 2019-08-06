@@ -15,10 +15,7 @@
   -->
 <resources>
 
-    <dimen name="chat_time_zone_height">18dp</dimen>
-    <dimen name="chat_time_text_size">11sp</dimen>
     <dimen name="chat_time_margin">13.33dp</dimen>
-    <dimen name="chat_user_icon_size">36dp</dimen>
 
     <dimen name="grid_expected_size">120dp</dimen>
     <dimen name="media_grid_size">48dp</dimen>
