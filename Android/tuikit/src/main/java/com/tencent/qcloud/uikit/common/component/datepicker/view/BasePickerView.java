@@ -55,7 +55,7 @@ public class BasePickerView {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         if (isDialog()) {
             //如果是对话框模式
-            dialogView = (ViewGroup) layoutInflater.inflate(R.layout.layout_basepickerview, null, false);
+            dialogView = (ViewGroup) layoutInflater.inflate(R.layout.layout_basepickerview2, null, false);
             //设置界面的背景为透明
             dialogView.setBackgroundColor(Color.TRANSPARENT);
             //这个是真正要加载选择器的父布局
@@ -80,7 +80,7 @@ public class BasePickerView {
                 mPickerOptions.decorView = (ViewGroup) ((Activity) context).getWindow().getDecorView();
             }
             //将控件添加到decorView中
-            rootView = (ViewGroup) layoutInflater.inflate(R.layout.layout_basepickerview, mPickerOptions.decorView, false);
+            rootView = (ViewGroup) layoutInflater.inflate(R.layout.layout_basepickerview2, mPickerOptions.decorView, false);
             rootView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             if (mPickerOptions.backgroundId != -1) {
                 rootView.setBackgroundColor(mPickerOptions.backgroundId);
