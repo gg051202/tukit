@@ -23,7 +23,6 @@
             android:layout_weight="0.96" />
 
         <com.tencent.qcloud.uikit.common.component.datepicker.view.WheelView
-
             android:id="@+id/month"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -5,28 +5,23 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 import android.util.LruCache;
-import android.util.SparseArray;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.tencent.qcloud.uikit.TUIKit;
 import com.tencent.qcloud.uikit.R;
+import com.tencent.qcloud.uikit.TUIKit;
 import com.tencent.qcloud.uikit.business.chat.view.widget.CustomFaceGroupConfigs;
 import com.tencent.qcloud.uikit.business.chat.view.widget.FaceConfig;
-import com.tencent.qcloud.uikit.common.utils.FileUtil;
 import com.tencent.qcloud.uikit.common.utils.UIUtils;
-import com.tencent.qcloud.uikit.common.widget.gatherimage.BitmapUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,10 +31,20 @@ public class FaceManager {
 
     private static ArrayList<Emoji> emojiList = new ArrayList<>();
     private static LruCache<String, Bitmap> drawableCache = new LruCache(1024);
-    private static Context context = TUIKit.getAppContext();
-    private static String[] emojiFilters = context.getResources().getStringArray(R.array.emoji_filter);
+    private static Context context;
+    private static String[] emojiFilters;
     private static final int drawableWidth = UIUtils.getPxByDp(32);
     private static ArrayList<FaceGroup> customFace = new ArrayList<>();
+
+    static {
+        context = TUIKit.getAppContext();
+        if (context != null) {
+            emojiFilters = context.getResources().getStringArray(R.array.emoji_filter);
+        } else {
+            emojiFilters = new String[]{};
+        }
+    }
+
 
     public static ArrayList<Emoji> getEmojiList() {
         return emojiList;
