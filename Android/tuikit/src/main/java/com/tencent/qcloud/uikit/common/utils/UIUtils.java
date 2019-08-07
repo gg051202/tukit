@@ -19,6 +19,9 @@ public class UIUtils {
     private static Toast mToast;
 
     public static final void toastLongMessage(final String message) {
+        if (BackgroundTasks.getInstance() == null) {
+            return;
+        }
         BackgroundTasks.getInstance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
