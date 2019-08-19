@@ -10,8 +10,6 @@ import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMMessage;
 import com.tencent.imsdk.TIMMessageListener;
 import com.tencent.imsdk.TIMValueCallBack;
-import com.tencent.imsdk.ext.message.TIMConversationExt;
-import com.tencent.imsdk.ext.message.TIMMessageExt;
 import com.tencent.imsdk.ext.message.TIMMessageLocator;
 import com.tencent.imsdk.log.QLog;
 import com.tencent.qcloud.uikit.business.chat.model.MessageInfo;
@@ -37,7 +35,6 @@ public class C2CChatManager implements TIMMessageListener, UIKitMessageRevokedMa
     private static final int REVOKE_TIME_OUT = 6223;
     private C2CChatProvider mCurrentProvider;
     private TIMConversation mCurrentConversation;
-    private TIMConversationExt mCurrentConversationExt;
     private C2CChatInfo mCurrentChatInfo;
     private Map<String, C2CChatInfo> mC2CChatMap = new HashMap<>();
     private boolean mIsMore;
@@ -63,7 +60,6 @@ public class C2CChatManager implements TIMMessageListener, UIKitMessageRevokedMa
         }
         mCurrentChatInfo = info;
         mCurrentConversation = TIMManager.getInstance().getConversation(info.getType(), info.getPeer());
-        mCurrentConversationExt = new TIMConversationExt(mCurrentConversation);
         mCurrentProvider = new C2CChatProvider();
         mIsMore = true;
         mIsLoading = false;
@@ -102,8 +98,8 @@ public class C2CChatManager implements TIMMessageListener, UIKitMessageRevokedMa
         } else {
             lastTIMMsg = lastMessage.getTIMMessage();
         }
-        final int unread = (int) mCurrentConversationExt.getUnreadMessageNum();
-        mCurrentConversationExt.getMessage(unread > MSG_PAGE_COUNT ? unread : MSG_PAGE_COUNT
+        final int unread = (int) mCurrentConversation.getUnreadMessageNum();
+        mCurrentConversation.getMessage(unread > MSG_PAGE_COUNT ? unread : MSG_PAGE_COUNT
                 , lastTIMMsg, new TIMValueCallBack<List<TIMMessage>>() {
                     @Override
                     public void onError(int code, String desc) {
@@ -118,7 +114,7 @@ public class C2CChatManager implements TIMMessageListener, UIKitMessageRevokedMa
                         if (mCurrentProvider == null)
                             return;
                         if (unread > 0) {
-                            mCurrentConversationExt.setReadMessage(null, new TIMCallBack() {
+                            mCurrentConversation.setReadMessage(null, new TIMCallBack() {
                                 @Override
                                 public void onError(int code, String desc) {
                                     QLog.e(TAG, "loadChatMessages() setReadMessage failed, code = " + code + ", desc = " + desc);
@@ -204,8 +200,7 @@ public class C2CChatManager implements TIMMessageListener, UIKitMessageRevokedMa
     }
 
     public void deleteMessage(int position, MessageInfo messageInfo) {
-        TIMMessageExt ext = new TIMMessageExt(messageInfo.getTIMMessage());
-        if (ext.remove()) {
+        if (messageInfo.getTIMMessage().remove()) {
             if (mCurrentProvider == null)
                 return;
             mCurrentProvider.remove(position);
@@ -214,7 +209,7 @@ public class C2CChatManager implements TIMMessageListener, UIKitMessageRevokedMa
 
 
     public void revokeMessage(final int position, final MessageInfo messageInfo) {
-        mCurrentConversationExt.revokeMessage(messageInfo.getTIMMessage(), new TIMCallBack() {
+        mCurrentConversation.revokeMessage(messageInfo.getTIMMessage(), new TIMCallBack() {
             @Override
             public void onError(int code, String desc) {
                 if (code == REVOKE_TIME_OUT) {
@@ -292,7 +287,7 @@ public class C2CChatManager implements TIMMessageListener, UIKitMessageRevokedMa
         if (msgInfo != null && mCurrentConversation != null && mCurrentConversation.getPeer().equals(conversation.getPeer())) {
             mCurrentProvider.addMessageInfo(msgInfo);
             msgInfo.setRead(true);
-            mCurrentConversationExt.setReadMessage(null, new TIMCallBack() {
+            mCurrentConversation.setReadMessage(null, new TIMCallBack() {
                 @Override
                 public void onError(int code, String desc) {
                     QLog.e(TAG, "executeMessage() setReadMessage failed, code = " + code + ", desc = " + desc);
@@ -319,7 +314,6 @@ public class C2CChatManager implements TIMMessageListener, UIKitMessageRevokedMa
         mCurrentChatInfo = null;
         mCurrentConversation = null;
         mCurrentProvider = null;
-        mCurrentConversationExt = null;
         mIsMore = true;
     }
 

@@ -4,26 +4,25 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import com.tencent.qcloud.uikit.common.IUIKitCallBack;
 import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMElem;
 import com.tencent.imsdk.TIMElemType;
 import com.tencent.imsdk.TIMGroupSystemElem;
 import com.tencent.imsdk.TIMGroupSystemElemType;
+import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMMessage;
 import com.tencent.imsdk.TIMRefreshListener;
-import com.tencent.imsdk.ext.message.TIMConversationExt;
-import com.tencent.imsdk.ext.message.TIMManagerExt;
 import com.tencent.imsdk.ext.message.TIMMessageLocator;
 import com.tencent.imsdk.log.QLog;
 import com.tencent.qcloud.uikit.TUIKit;
 import com.tencent.qcloud.uikit.business.chat.model.MessageInfo;
 import com.tencent.qcloud.uikit.business.chat.model.MessageInfoUtil;
+import com.tencent.qcloud.uikit.common.IUIKitCallBack;
 import com.tencent.qcloud.uikit.operation.UIKitMessageRevokedManager;
+import com.tencent.qcloud.uikit.operation.message.UIKitRequest;
 import com.tencent.qcloud.uikit.operation.message.UIKitRequestDispatcher;
 import com.tencent.qcloud.uikit.operation.message.UIKitRequestHandler;
-import com.tencent.qcloud.uikit.operation.message.UIKitRequest;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,8 +63,6 @@ public class SessionManager implements UIKitRequestHandler, TIMRefreshListener, 
 
     /**
      * 加载会话信息
-     *
-     * @param callBack
      */
     public void loadSession(IUIKitCallBack callBack) {
         mUnreadTotal = 0;
@@ -74,10 +71,10 @@ public class SessionManager implements UIKitRequestHandler, TIMRefreshListener, 
             mProvider = new SessionProvider();
         else
             mProvider.clear();
-        List<TIMConversation> TIMSessions = TIMManagerExt.getInstance().getConversationList();
+        List<TIMConversation> tIMSessions = TIMManager.getInstance().getConversationList();
         ArrayList<SessionInfo> infos = new ArrayList<>();
-        for (int i = 0; i < TIMSessions.size(); i++) {
-            TIMConversation conversation = TIMSessions.get(i);
+        for (int i = 0; i < tIMSessions.size(); i++) {
+            TIMConversation conversation = tIMSessions.get(i);
             //将imsdk TIMConversation转换为UIKit SessionInfo
             SessionInfo sessionInfo = TIMConversation2SessionInfo(conversation);
             if (sessionInfo != null) {
@@ -120,10 +117,10 @@ public class SessionManager implements UIKitRequestHandler, TIMRefreshListener, 
             if (sessionInfo != null)
                 infos.add(sessionInfo);
         }
-        if (infos.size() == 0)
+        if (infos.isEmpty())
             return;
         List<SessionInfo> dataSource = mProvider.getDataSource();
-        ArrayList exists = new ArrayList();
+        ArrayList<SessionInfo> exists = new ArrayList<>();
         for (int j = 0; j < infos.size(); j++) {
             SessionInfo update = infos.get(j);
             boolean exist = false;
@@ -147,7 +144,7 @@ public class SessionManager implements UIKitRequestHandler, TIMRefreshListener, 
         }
         updateUnreadTotal(mUnreadTotal);
         infos.removeAll(exists);
-        if (infos.size() > 0) {
+        if (!infos.isEmpty()) {
             dataSource.addAll(infos);
         }
         mProvider.setDataSource(sortSessions(dataSource));
@@ -160,13 +157,10 @@ public class SessionManager implements UIKitRequestHandler, TIMRefreshListener, 
      * @return
      */
     private SessionInfo TIMConversation2SessionInfo(TIMConversation session) {
-        if (session != null) {
-            if (TextUtils.isEmpty(session.getPeer())) { // 没有peer的会话，点击进去会有异常，这里做拦截
-                return null;
-            }
+        if (session == null || TextUtils.isEmpty(session.getPeer())) { // 没有peer的会话，点击进去会有异常，这里做拦截
+            return null;
         }
-        TIMConversationExt ext = new TIMConversationExt(session);
-        TIMMessage message = ext.getLastMsg();
+        TIMMessage message = session.getLastMsg();
         if (message == null)
             return null;
         SessionInfo info = new SessionInfo();
@@ -193,8 +187,8 @@ public class SessionManager implements UIKitRequestHandler, TIMRefreshListener, 
             info.setTitle(session.getPeer());
         info.setPeer(session.getPeer());
         info.setGroup(session.getType() == TIMConversationType.Group);
-        if (ext.getUnreadMessageNum() > 0)
-            info.setUnRead((int) ext.getUnreadMessageNum());
+        if (session.getUnreadMessageNum() > 0)
+            info.setUnRead((int) session.getUnreadMessageNum());
         return info;
     }
 
@@ -289,7 +283,7 @@ public class SessionManager implements UIKitRequestHandler, TIMRefreshListener, 
      * @param session 会话信息
      */
     public void deleteSession(int index, SessionInfo session) {
-        boolean status = TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(session.isGroup() ? TIMConversationType.Group : TIMConversationType.C2C, session.getPeer());
+        boolean status = TIMManager.getInstance().deleteConversationAndLocalMsgs(session.isGroup() ? TIMConversationType.Group : TIMConversationType.C2C, session.getPeer());
         if (status) {
             handleTopData(session.getPeer(), false);
             mProvider.deleteSession(index);

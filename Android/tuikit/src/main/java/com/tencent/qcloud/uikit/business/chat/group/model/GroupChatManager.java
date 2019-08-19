@@ -27,8 +27,6 @@ import com.tencent.imsdk.ext.group.TIMGroupPendencyGetParam;
 import com.tencent.imsdk.ext.group.TIMGroupPendencyHandledStatus;
 import com.tencent.imsdk.ext.group.TIMGroupPendencyItem;
 import com.tencent.imsdk.ext.group.TIMGroupPendencyListGetSucc;
-import com.tencent.imsdk.ext.message.TIMConversationExt;
-import com.tencent.imsdk.ext.message.TIMMessageExt;
 import com.tencent.imsdk.ext.message.TIMMessageLocator;
 import com.tencent.imsdk.log.QLog;
 import com.tencent.qcloud.uikit.business.chat.model.BaseChatInfo;
@@ -55,7 +53,6 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
     private static GroupChatManager instance = new GroupChatManager();
     private GroupChatProvider mCurrentProvider;
     private TIMConversation mCurrentConversation;
-    private TIMConversationExt mCurrentConversationExt;
     private GroupChatInfo mCurrentChatInfo;
     private List<GroupApplyInfo> mCurrentApplies = new ArrayList<>();
     private List<GroupMemberInfo> mCurrentGroupMembers = new ArrayList<>();
@@ -130,7 +127,6 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
     public void setChatInfo(BaseChatInfo info) {
         mCurrentChatInfo = (GroupChatInfo) info;
         mCurrentConversation = TIMManager.getInstance().getConversation(info.getType(), info.getPeer());
-        mCurrentConversationExt = new TIMConversationExt(mCurrentConversation);
         mCurrentProvider = new GroupChatProvider();
         mCurrentApplies.clear();
         mCurrentGroupMembers.clear();
@@ -162,8 +158,8 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
         } else {
             lastTIMMsg = lastMessage.getTIMMessage();
         }
-        final int unread = (int) mCurrentConversationExt.getUnreadMessageNum();
-        mCurrentConversationExt.getMessage(unread > MSG_PAGE_COUNT ? unread : MSG_PAGE_COUNT
+        final int unread = (int) mCurrentConversation.getUnreadMessageNum();
+        mCurrentConversation.getMessage(unread > MSG_PAGE_COUNT ? unread : MSG_PAGE_COUNT
                 , lastTIMMsg, new TIMValueCallBack<List<TIMMessage>>() {
                     @Override
                     public void onError(int code, String desc) {
@@ -178,7 +174,7 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
                         if (mCurrentProvider == null)
                             return;
                         if (unread > 0) {
-                            mCurrentConversationExt.setReadMessage(null, new TIMCallBack() {
+                            mCurrentConversation.setReadMessage(null, new TIMCallBack() {
                                 @Override
                                 public void onError(int code, String desc) {
                                     QLog.e(TAG, "setReadMessage failed, code: " + code + "|desc: " + desc);
@@ -284,8 +280,7 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
 
 
     public void deleteMessage(int position, MessageInfo messageInfo) {
-        TIMMessageExt ext = new TIMMessageExt(messageInfo.getTIMMessage());
-        if (ext.remove()) {
+        if (messageInfo.getTIMMessage().remove()) {
             if (mCurrentProvider == null)
                 return;
             mCurrentProvider.remove(position);
@@ -294,7 +289,7 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
 
 
     public void revokeMessage(final int position, final MessageInfo messageInfo) {
-        mCurrentConversationExt.revokeMessage(messageInfo.getTIMMessage(), new TIMCallBack() {
+        mCurrentConversation.revokeMessage(messageInfo.getTIMMessage(), new TIMCallBack() {
             @Override
             public void onError(int code, String desc) {
                 UIUtils.toastLongMessage("撤销失败:" + code + "=" + desc);
@@ -382,7 +377,7 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
     public void getGroupRemote(String groupId, final IUIKitCallBack callBack) {
         List<String> groupList = new ArrayList<>();
         groupList.add(groupId);
-        TIMGroupManagerExt.getInstance().getGroupInfo(groupList, new TIMValueCallBack<List<TIMGroupDetailInfo>>() {
+        TIMGroupManager.getInstance().getGroupInfo(groupList, new TIMValueCallBack<List<TIMGroupDetailInfo>>() {
             @Override
             public void onError(final int code, final String desc) {
                 QLog.e(TAG, "getGroupPublicInfo failed, code: " + code + "|desc: " + desc);
@@ -401,7 +396,7 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
     }
 
     public void loadGroupMembersRemote(String groupId, final IUIKitCallBack callBack) {
-        TIMGroupManagerExt.getInstance().getGroupMembers(groupId, new TIMValueCallBack<List<TIMGroupMemberInfo>>() {
+        TIMGroupManager.getInstance().getGroupMembers(groupId, new TIMValueCallBack<List<TIMGroupMemberInfo>>() {
             @Override
             public void onError(int code, String desc) {
                 QLog.e(TAG, "getGroupMembers failed, code: " + code + "|desc: " + desc);
@@ -484,7 +479,7 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
 
     public void modifyGroupInfo(final Object value, final int type, final IUIKitCallBack callBack) {
 
-        TIMGroupManagerExt.ModifyGroupInfoParam param = new TIMGroupManagerExt.ModifyGroupInfoParam(mCurrentChatInfo.getPeer());
+        TIMGroupManager.ModifyGroupInfoParam param = new TIMGroupManager.ModifyGroupInfoParam(mCurrentChatInfo.getPeer());
         if (type == GroupInfoUtils.MODIFY_GROUP_NAME) {
             param.setGroupName(value.toString());
         } else if (type == GroupInfoUtils.MODIFY_GROUP_NOTICE) {
@@ -494,7 +489,7 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
         }
 
 
-        TIMGroupManagerExt.getInstance().modifyGroupInfo(param, new TIMCallBack() {
+        TIMGroupManager.getInstance().modifyGroupInfo(param, new TIMCallBack() {
             @Override
             public void onError(int code, String desc) {
                 QLog.i(TAG, "modifyGroupInfo faild tyep| value| code| desc " + value + ":" + type + ":" + code + ":" + desc);
@@ -519,11 +514,11 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
 
 
     public void modifyGroupNickname(final String nickname, int type, final IUIKitCallBack callBack) {
-        TIMGroupManagerExt.ModifyMemberInfoParam param = new TIMGroupManagerExt.ModifyMemberInfoParam(mCurrentChatInfo.getPeer(), TIMManager.getInstance().getLoginUser());
+        TIMGroupManager.ModifyMemberInfoParam param = new TIMGroupManager.ModifyMemberInfoParam(mCurrentChatInfo.getPeer(), TIMManager.getInstance().getLoginUser());
         if (type == GroupInfoUtils.MODIFY_MEMBER_NAME) {
             param.setNameCard(nickname);
         }
-        TIMGroupManagerExt.getInstance().modifyMemberInfo(param, new TIMCallBack() {
+        TIMGroupManager.getInstance().modifyMemberInfo(param, new TIMCallBack() {
             @Override
             public void onError(int code, String desc) {
                 callBack.onError(TAG, code, desc);
@@ -607,7 +602,7 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
 
     public void inviteGroupMembers(List<String> addMembers, final IUIKitCallBack callBack) {
 
-        TIMGroupManagerExt.getInstance().inviteGroupMember(mCurrentChatInfo.getPeer(), addMembers, new TIMValueCallBack<List<TIMGroupMemberResult>>() {
+        TIMGroupManager.getInstance().inviteGroupMember(mCurrentChatInfo.getPeer(), addMembers, new TIMValueCallBack<List<TIMGroupMemberResult>>() {
             @Override
             public void onError(int code, String desc) {
                 QLog.e(TAG, "addGroupMembers failed, code: " + code + "|desc: " + desc);
@@ -658,8 +653,8 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
             members.add(delMembers.get(i).getAccount());
         }
 
-        TIMGroupManagerExt.DeleteMemberParam param = new TIMGroupManagerExt.DeleteMemberParam(mCurrentChatInfo.getPeer(), members);
-        TIMGroupManagerExt.getInstance().deleteGroupMember(param, new TIMValueCallBack<List<TIMGroupMemberResult>>() {
+        TIMGroupManager.DeleteMemberParam param = new TIMGroupManager.DeleteMemberParam(mCurrentChatInfo.getPeer(), members);
+        TIMGroupManager.getInstance().deleteGroupMember(param, new TIMValueCallBack<List<TIMGroupMemberResult>>() {
             @Override
             public void onError(int code, String desc) {
                 QLog.e(TAG, "removeGroupMembers failed, code: " + code + "|desc: " + desc);
@@ -709,7 +704,7 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
     public void loadRemoteApplayInfos(final IUIKitCallBack callBack) {
         TIMGroupPendencyGetParam param = new TIMGroupPendencyGetParam();
         param.setTimestamp(mPendencyTime);
-        TIMGroupManagerExt.getInstance().getGroupPendencyList(param, new TIMValueCallBack<TIMGroupPendencyListGetSucc>() {
+        TIMGroupManager.getInstance().getGroupPendencyList(param, new TIMValueCallBack<TIMGroupPendencyListGetSucc>() {
             @Override
             public void onError(final int code, final String desc) {
                 QLog.e(TAG, "getGroupPendencyList failed, code: " + code + "|desc: " + desc);
@@ -814,7 +809,7 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
         if (msgInfo != null && mCurrentConversation != null && conversation.getPeer().endsWith(mCurrentConversation.getPeer())) {
             mCurrentProvider.addMessageInfo(msgInfo);
             msgInfo.setRead(true);
-            mCurrentConversationExt.setReadMessage(msg, new TIMCallBack() {
+            mCurrentConversation.setReadMessage(msg, new TIMCallBack() {
                 @Override
                 public void onError(int code, String desc) {
                     QLog.e(TAG, "setReadMessage failed, code: " + code + "|desc: " + desc);
@@ -935,7 +930,6 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
     public void destroyGroupChat() {
         mCurrentChatInfo = null;
         mCurrentConversation = null;
-        mCurrentConversationExt = null;
         mCurrentProvider = null;
         mSelfInfo = null;
         mCurrentApplies.clear();
