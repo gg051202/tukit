@@ -22,15 +22,14 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.widget.ImageView;
 
-
 import com.tencent.qcloud.uikit.common.UIKitConstants;
 import com.tencent.qcloud.uikit.common.component.video.listener.ErrorListener;
 import com.tencent.qcloud.uikit.common.component.video.util.AngleUtil;
 import com.tencent.qcloud.uikit.common.component.video.util.CameraParamUtil;
 import com.tencent.qcloud.uikit.common.component.video.util.CheckPermission;
 import com.tencent.qcloud.uikit.common.component.video.util.DeviceUtil;
-import com.tencent.qcloud.uikit.common.utils.FileUtil;
 import com.tencent.qcloud.uikit.common.component.video.util.LogUtil;
+import com.tencent.qcloud.uikit.common.utils.FileUtil;
 import com.tencent.qcloud.uikit.common.utils.ScreenUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -333,6 +332,34 @@ public class CameraInterface implements Camera.PreviewCallback {
         doStartPreview(holder, screenProp);
     }
 
+
+    private Camera.Size getBestSupportedSize(List<Camera.Size> sizes, int targetHeight, float targetRatio) {
+        final double ASPECT_TOLERANCE = 0.1;
+        Camera.Size optimalSize = null;
+        double minDiff = Double.MAX_VALUE;
+
+        for (Camera.Size size : sizes) {
+            double ratio = (double) size.width / size.height;
+            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
+            if (Math.abs(size.height - targetHeight) < minDiff) {
+                optimalSize = size;
+                minDiff = Math.abs(size.height - targetHeight);
+            }
+        }
+
+        if (optimalSize == null) {
+            minDiff = Double.MAX_VALUE;
+            for (Camera.Size size : sizes) {
+                if (Math.abs(size.height - targetHeight) < minDiff) {
+                    optimalSize = size;
+                    minDiff = Math.abs(size.height - targetHeight);
+                }
+            }
+        }
+
+        return optimalSize;
+    }
+
     /**
      * doStartPreview
      */
@@ -350,22 +377,23 @@ public class CameraInterface implements Camera.PreviewCallback {
         if (mCamera != null) {
             try {
                 mParams = mCamera.getParameters();
-                Camera.Size previewSize = CameraParamUtil.getInstance().getPreviewSize(mParams
-                        .getSupportedPreviewSizes(), 1000, screenProp);
-                Camera.Size pictureSize = CameraParamUtil.getInstance().getPictureSize(mParams
-                        .getSupportedPictureSizes(), 1200, screenProp);
+                Camera.Size previewSize = getBestSupportedSize(mParams.getSupportedPreviewSizes(), 800, screenProp);
+                Camera.Size pictureSize = CameraParamUtil.getInstance().getPictureSize(mParams.getSupportedPictureSizes(), 1200, screenProp);
 
                 mParams.setPreviewSize(previewSize.width, previewSize.height);
 
                 preview_width = previewSize.width;
                 preview_height = previewSize.height;
 
+
                 mParams.setPictureSize(pictureSize.width, pictureSize.height);
 
-                if (CameraParamUtil.getInstance().isSupportedFocusMode(
-                        mParams.getSupportedFocusModes(),
-                        Camera.Parameters.FOCUS_MODE_AUTO)) {
-                    mParams.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+//                if (CameraParamUtil.getInstance().isSupportedFocusMode(mParams.getSupportedFocusModes(), Camera.Parameters.FOCUS_MODE_AUTO)) {
+//                    mParams.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+//                }
+                List<String> focusModes = mParams.getSupportedFocusModes();
+                if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+                    mParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
                 }
                 if (CameraParamUtil.getInstance().isSupportedPictureFormats(mParams.getSupportedPictureFormats(),
                         ImageFormat.JPEG)) {
@@ -512,6 +540,7 @@ public class CameraInterface implements Camera.PreviewCallback {
         if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
             mParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
         }
+
         mCamera.setParameters(mParams);
         mCamera.unlock();
         mediaRecorder.reset();
@@ -527,11 +556,9 @@ public class CameraInterface implements Camera.PreviewCallback {
 
         Camera.Size videoSize;
         if (mParams.getSupportedVideoSizes() == null) {
-            videoSize = CameraParamUtil.getInstance().getPreviewSize(mParams.getSupportedPreviewSizes(), 600,
-                    screenProp);
+            videoSize = getBestSupportedSize(mParams.getSupportedPreviewSizes(), 800, screenProp);
         } else {
-            videoSize = CameraParamUtil.getInstance().getPreviewSize(mParams.getSupportedVideoSizes(), 600,
-                    screenProp);
+            videoSize = CameraParamUtil.getInstance().getPreviewSize(mParams.getSupportedVideoSizes(), 600, screenProp);
         }
         Log.i(TAG, "setVideoSize    width = " + videoSize.width + "height = " + videoSize.height);
         if (videoSize.width == videoSize.height) {
@@ -545,6 +572,8 @@ public class CameraInterface implements Camera.PreviewCallback {
 //            mediaRecorder.setOrientationHint(nowAngle);
 ////            mediaRecorder.setOrientationHint(90);
 //        }
+
+        System.out.println("SELECTED_CAMERA:" + SELECTED_CAMERA + ",CAMERA_FRONT_POSITION:" + CAMERA_FRONT_POSITION + " cameraAngle:" + cameraAngle + " nowAngle:" + nowAngle);
 
         if (SELECTED_CAMERA == CAMERA_FRONT_POSITION) {
             //手机预览倒立的处理
@@ -569,7 +598,6 @@ public class CameraInterface implements Camera.PreviewCallback {
         } else {
             mediaRecorder.setOrientationHint(nowAngle);
         }
-
 
         if (DeviceUtil.isHuaWeiRongyao()) {
             mediaRecorder.setVideoEncodingBitRate(4 * 100000);
@@ -758,4 +786,6 @@ public class CameraInterface implements Camera.PreviewCallback {
     void isPreview(boolean res) {
         this.isPreviewing = res;
     }
+
+
 }

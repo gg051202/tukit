@@ -2,6 +2,7 @@ package com.tencent.qcloud.uikit.common.component.video;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -12,7 +13,6 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,7 +22,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
-
 import com.tencent.qcloud.uikit.R;
 import com.tencent.qcloud.uikit.TUIKit;
 import com.tencent.qcloud.uikit.common.component.video.listener.CaptureListener;
@@ -31,16 +30,14 @@ import com.tencent.qcloud.uikit.common.component.video.listener.ErrorListener;
 import com.tencent.qcloud.uikit.common.component.video.listener.JCameraListener;
 import com.tencent.qcloud.uikit.common.component.video.listener.TypeListener;
 import com.tencent.qcloud.uikit.common.component.video.state.CameraMachine;
-import com.tencent.qcloud.uikit.common.utils.FileUtil;
 import com.tencent.qcloud.uikit.common.component.video.util.LogUtil;
 import com.tencent.qcloud.uikit.common.component.video.view.CameraView;
+import com.tencent.qcloud.uikit.common.utils.FileUtil;
 import com.tencent.qcloud.uikit.common.utils.ScreenUtil;
 
 import java.io.IOException;
 
-public class JCameraView extends FrameLayout implements CameraInterface.CameraOpenOverCallback, SurfaceHolder
-        .Callback, CameraView {
-//    private static final String TAG = "JCameraView";
+public class JCameraView extends FrameLayout implements CameraInterface.CameraOpenOverCallback, SurfaceHolder.Callback, CameraView {
 
     //Camera状态机
     private CameraMachine machine;
@@ -49,7 +46,6 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     private static final int TYPE_FLASH_AUTO = 0x021;
     private static final int TYPE_FLASH_ON = 0x022;
     private static final int TYPE_FLASH_OFF = 0x023;
-    private int type_flash = TYPE_FLASH_OFF;
 
     //拍照浏览时候的类型
     public static final int TYPE_PICTURE = 0x001;
@@ -64,42 +60,37 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     public static final int MEDIA_QUALITY_POOR = 8 * 100000;
     public static final int MEDIA_QUALITY_FUNNY = 4 * 100000;
     public static final int MEDIA_QUALITY_DESPAIR = 2 * 100000;
-    public static final int MEDIA_QUALITY_SORRY = 1 * 80000;
-
+    public static final int MEDIA_QUALITY_SORRY = 80000;
 
     public static final int BUTTON_STATE_ONLY_CAPTURE = 0x101;      //只能拍照
     public static final int BUTTON_STATE_ONLY_RECORDER = 0x102;     //只能录像
     public static final int BUTTON_STATE_BOTH = 0x103;              //两者都可以
 
-
     //回调监听
-    private JCameraListener jCameraLisenter;
-    private ClickListener leftClickListener;
-    private ClickListener rightClickListener;
+    private JCameraListener mJCameraListener;
+    private ClickListener mLeftClickListener;
+    private ClickListener mRightClickListener;
 
     private Context mContext;
     private VideoView mVideoView;
-    private ImageView mPhoto;
-    private ImageView mSwitchCamera;
+    private ImageView mPhotoImageView;
+    private ImageView mSwitchCameraImageView;
     private CaptureLayout mCaptureLayout;
     private FoucsView mFoucsView;
     private MediaPlayer mMediaPlayer;
 
-    private int layout_width;
+    private int layoutWidth;
     private float screenProp = 0f;
 
-    private Bitmap captureBitmap;   //捕获的图片
-    private Bitmap firstFrame;      //第一帧图片
-    private String videoUrl;        //视频URL
+    private Bitmap mCaptureBitmap;   //捕获的图片
+    private Bitmap mFirstFrame;      //第一帧图片
+    private String mVideoUrl;        //视频URL
 
 
-    //切换摄像头按钮的参数
-    private int iconSize = 0;       //图标大小
-    private int iconMargin = 0;     //右上边距
-    private int iconSrc = 0;        //图标资源
-    private int iconLeft = 0;       //左图标
-    private int iconRight = 0;      //右图标
-    private int duration = 0;       //录制时间
+    private int iconSrc;        //图标资源
+    private int iconLeft;       //左图标
+    private int iconRight;      //右图标
+    private int duration;       //录制时间
     private long recordTime;
 
     //缩放梯度
@@ -121,11 +112,10 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
         mContext = context;
         //get AttributeSet
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.JCameraView, defStyleAttr, 0);
-        iconSize = a.getDimensionPixelSize(R.styleable.JCameraView_iconSize, (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_SP, 35, getResources().getDisplayMetrics()));
-        iconMargin = a.getDimensionPixelSize(R.styleable.JCameraView_iconMargin, (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_SP, 15, getResources().getDisplayMetrics()));
-        iconSrc = a.getResourceId(R.styleable.JCameraView_iconSrc, R.drawable.ic_camera);
+        //切换摄像头按钮的参数
+        //图标大小
+        //右上边距
+        iconSrc = a.getResourceId(R.styleable.JCameraView_iconSrc, R.drawable.jingtouqiehuan);
         iconLeft = a.getResourceId(R.styleable.JCameraView_iconLeft, 0);
         iconRight = a.getResourceId(R.styleable.JCameraView_iconRight, 0);
         duration = a.getInteger(R.styleable.JCameraView_duration_max, TUIKit.getBaseConfigs().getVideoRecordMaxTime() * 1000);       //没设置默认为10s
@@ -135,9 +125,9 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     }
 
     private void initData() {
-        layout_width = ScreenUtil.getScreenWidth(mContext);
+        layoutWidth = ScreenUtil.getScreenWidth(mContext);
         //缩放梯度
-        zoomGradient = (int) (layout_width / 16f);
+        zoomGradient = (int) (layoutWidth / 16f);
         LogUtil.i("zoom = " + zoomGradient);
         machine = new CameraMachine(getContext(), this, this);
     }
@@ -145,18 +135,18 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     private void initView() {
         setWillNotDraw(false);
         View view = LayoutInflater.from(mContext).inflate(R.layout.camera_view, this);
-        mVideoView = (VideoView) view.findViewById(R.id.video_preview);
-        mPhoto = (ImageView) view.findViewById(R.id.image_photo);
-        mSwitchCamera = (ImageView) view.findViewById(R.id.image_switch);
-        mSwitchCamera.setImageResource(iconSrc);
+        mVideoView = view.findViewById(R.id.video_preview);
+        mPhotoImageView = view.findViewById(R.id.image_photo);
+        mSwitchCameraImageView = view.findViewById(R.id.image_switch);
+        mSwitchCameraImageView.setImageResource(iconSrc);
         setFlashRes();
-        mCaptureLayout = (CaptureLayout) view.findViewById(R.id.capture_layout);
+        mCaptureLayout = view.findViewById(R.id.capture_layout);
         mCaptureLayout.setDuration(duration);
         mCaptureLayout.setIconSrc(iconLeft, iconRight);
-        mFoucsView = (FoucsView) view.findViewById(R.id.fouce_view);
+        mFoucsView = view.findViewById(R.id.fouce_view);
         mVideoView.getHolder().addCallback(this);
         //切换摄像头
-        mSwitchCamera.setOnClickListener(new OnClickListener() {
+        mSwitchCameraImageView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 machine.swtich(mVideoView.getHolder(), screenProp);
@@ -166,20 +156,20 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
         mCaptureLayout.setCaptureLisenter(new CaptureListener() {
             @Override
             public void takePictures() {
-                mSwitchCamera.setVisibility(INVISIBLE);
+                mSwitchCameraImageView.setVisibility(INVISIBLE);
                 machine.capture();
             }
 
             @Override
             public void recordStart() {
-                mSwitchCamera.setVisibility(INVISIBLE);
+                mSwitchCameraImageView.setVisibility(INVISIBLE);
                 machine.record(mVideoView.getHolder().getSurface(), screenProp);
             }
 
             @Override
             public void recordShort(final long time) {
                 mCaptureLayout.setTextWithAnimation("录制时间过短");
-                mSwitchCamera.setVisibility(VISIBLE);
+                mSwitchCameraImageView.setVisibility(VISIBLE);
                 postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -223,24 +213,24 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
 //        mCaptureLayout.setReturnLisenter(new ReturnListener() {
 //            @Override
 //            public void onReturn() {
-//                if (jCameraLisenter != null) {
-//                    jCameraLisenter.quit();
+//                if (mJCameraListener != null) {
+//                    mJCameraListener.quit();
 //                }
 //            }
 //        });
         mCaptureLayout.setLeftClickListener(new ClickListener() {
             @Override
             public void onClick() {
-                if (leftClickListener != null) {
-                    leftClickListener.onClick();
+                if (mLeftClickListener != null) {
+                    mLeftClickListener.onClick();
                 }
             }
         });
         mCaptureLayout.setRightClickListener(new ClickListener() {
             @Override
             public void onClick() {
-                if (rightClickListener != null) {
-                    rightClickListener.onClick();
+                if (mRightClickListener != null) {
+                    mRightClickListener.onClick();
                 }
             }
         });
@@ -301,6 +291,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
@@ -319,14 +310,14 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
                 }
                 if (event.getPointerCount() == 2) {
                     //第一个点
-                    float point_1_X = event.getX(0);
-                    float point_1_Y = event.getY(0);
+                    float point1X = event.getX(0);
+                    float point1Y = event.getY(0);
                     //第二个点
-                    float point_2_X = event.getX(1);
-                    float point_2_Y = event.getY(1);
+                    float point2X = event.getX(1);
+                    float point2Y = event.getY(1);
 
-                    float result = (float) Math.sqrt(Math.pow(point_1_X - point_2_X, 2) + Math.pow(point_1_Y -
-                            point_2_Y, 2));
+                    float result = (float) Math.sqrt(Math.pow(point1X - point2X, 2) + Math.pow(point1Y -
+                            point2Y, 2));
 
                     if (firstTouch) {
                         firstTouchLength = result;
@@ -368,7 +359,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
 
 
     public void setJCameraLisenter(JCameraListener jCameraLisenter) {
-        this.jCameraLisenter = jCameraLisenter;
+        this.mJCameraListener = jCameraLisenter;
     }
 
 
@@ -396,12 +387,12 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
             case TYPE_VIDEO:
                 stopVideo();    //停止播放
                 //初始化VideoView
-                FileUtil.deleteFile(videoUrl);
+                FileUtil.deleteFile(mVideoUrl);
                 mVideoView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
                 machine.start(mVideoView.getHolder(), screenProp);
                 break;
             case TYPE_PICTURE:
-                mPhoto.setVisibility(INVISIBLE);
+                mPhotoImageView.setVisibility(INVISIBLE);
                 break;
             case TYPE_SHORT:
                 break;
@@ -409,7 +400,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
                 mVideoView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
                 break;
         }
-        mSwitchCamera.setVisibility(VISIBLE);
+        mSwitchCameraImageView.setVisibility(VISIBLE);
         //mFlashLamp.setVisibility(VISIBLE);
         mCaptureLayout.resetCaptureLayout();
     }
@@ -421,14 +412,14 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
                 stopVideo();    //停止播放
                 mVideoView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
                 machine.start(mVideoView.getHolder(), screenProp);
-                if (jCameraLisenter != null) {
-                    jCameraLisenter.recordSuccess(videoUrl, firstFrame, recordTime);
+                if (mJCameraListener != null) {
+                    mJCameraListener.recordSuccess(mVideoUrl, mFirstFrame, recordTime);
                 }
                 break;
             case TYPE_PICTURE:
-                mPhoto.setVisibility(INVISIBLE);
-                if (jCameraLisenter != null) {
-                    jCameraLisenter.captureSuccess(captureBitmap);
+                mPhotoImageView.setVisibility(INVISIBLE);
+                if (mJCameraListener != null) {
+                    mJCameraListener.captureSuccess(mCaptureBitmap);
                 }
                 break;
             case TYPE_SHORT:
@@ -442,21 +433,21 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     @Override
     public void showPicture(Bitmap bitmap, boolean isVertical) {
         if (isVertical) {
-            mPhoto.setScaleType(ImageView.ScaleType.FIT_XY);
+            mPhotoImageView.setScaleType(ImageView.ScaleType.FIT_XY);
         } else {
-            mPhoto.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            mPhotoImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         }
-        captureBitmap = bitmap;
-        mPhoto.setImageBitmap(bitmap);
-        mPhoto.setVisibility(VISIBLE);
+        mCaptureBitmap = bitmap;
+        mPhotoImageView.setImageBitmap(bitmap);
+        mPhotoImageView.setVisibility(VISIBLE);
         mCaptureLayout.startAlphaAnimation();
         mCaptureLayout.startTypeBtnAnimator();
     }
 
     @Override
     public void playVideo(Bitmap firstFrame, final String url) {
-        videoUrl = url;
-        JCameraView.this.firstFrame = firstFrame;
+        mVideoUrl = url;
+        JCameraView.this.mFirstFrame = firstFrame;
         new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
@@ -521,20 +512,20 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
             return false;
         }
         mFoucsView.setVisibility(VISIBLE);
-        if (x < mFoucsView.getWidth() / 2) {
+        if (x < mFoucsView.getWidth() / 2f) {
             x = mFoucsView.getWidth() / 2;
         }
-        if (x > layout_width - mFoucsView.getWidth() / 2) {
-            x = layout_width - mFoucsView.getWidth() / 2;
+        if (x > layoutWidth - mFoucsView.getWidth() / 2f) {
+            x = layoutWidth - mFoucsView.getWidth() / 2;
         }
-        if (y < mFoucsView.getWidth() / 2) {
+        if (y < mFoucsView.getWidth() / 2f) {
             y = mFoucsView.getWidth() / 2;
         }
-        if (y > mCaptureLayout.getTop() - mFoucsView.getWidth() / 2) {
+        if (y > mCaptureLayout.getTop() - mFoucsView.getWidth() / 2f) {
             y = mCaptureLayout.getTop() - mFoucsView.getWidth() / 2;
         }
-        mFoucsView.setX(x - mFoucsView.getWidth() / 2);
-        mFoucsView.setY(y - mFoucsView.getHeight() / 2);
+        mFoucsView.setX(x - mFoucsView.getWidth() / 2f);
+        mFoucsView.setY(y - mFoucsView.getHeight() / 2f);
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(mFoucsView, "scaleX", 1, 0.6f);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(mFoucsView, "scaleY", 1, 0.6f);
         ObjectAnimator alpha = ObjectAnimator.ofFloat(mFoucsView, "alpha", 1f, 0.4f, 1f, 0.4f, 1f, 0.4f, 1f);
@@ -546,15 +537,15 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     }
 
     public void setLeftClickListener(ClickListener clickListener) {
-        this.leftClickListener = clickListener;
+        this.mLeftClickListener = clickListener;
     }
 
     public void setRightClickListener(ClickListener clickListener) {
-        this.rightClickListener = clickListener;
+        this.mRightClickListener = clickListener;
     }
 
     private void setFlashRes() {
-        switch (type_flash) {
+        switch (TYPE_FLASH_OFF) {
             case TYPE_FLASH_AUTO:
                 machine.flash(Camera.Parameters.FLASH_MODE_AUTO);
                 break;
@@ -567,8 +558,11 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
         }
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
+    public ImageView getSwitchCameraImageView() {
+        return mSwitchCameraImageView;
+    }
+
+    public CaptureLayout getCaptureLayout() {
+        return mCaptureLayout;
     }
 }

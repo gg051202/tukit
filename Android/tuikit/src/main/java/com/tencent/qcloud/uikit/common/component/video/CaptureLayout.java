@@ -119,11 +119,11 @@ public class CaptureLayout extends FrameLayout {
         btn_confirm.setVisibility(VISIBLE);
         btn_cancel.setClickable(false);
         btn_confirm.setClickable(false);
-        ObjectAnimator animator_cancel = ObjectAnimator.ofFloat(btn_cancel, "translationX", layout_width / 4, 0);
-        ObjectAnimator animator_confirm = ObjectAnimator.ofFloat(btn_confirm, "translationX", -layout_width / 4, 0);
+        ObjectAnimator animatorCancel = ObjectAnimator.ofFloat(btn_cancel, "translationX", layout_width / 4, 0);
+        ObjectAnimator animatorConfirm = ObjectAnimator.ofFloat(btn_confirm, "translationX", -layout_width / 4, 0);
 
         AnimatorSet set = new AnimatorSet();
-        set.playTogether(animator_cancel, animator_confirm);
+        set.playTogether(animatorCancel, animatorConfirm);
         set.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -194,10 +194,10 @@ public class CaptureLayout extends FrameLayout {
 
         //取消按钮
         btn_cancel = new TypeButton(getContext(), TypeButton.TYPE_CANCEL, button_size);
-        final LayoutParams btn_cancel_param = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        btn_cancel_param.gravity = Gravity.CENTER_VERTICAL;
-        btn_cancel_param.setMargins((layout_width / 4) - button_size / 2, 0, 0, 0);
-        btn_cancel.setLayoutParams(btn_cancel_param);
+        final LayoutParams cancleLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        cancleLayoutParams.gravity = Gravity.CENTER_VERTICAL;
+        cancleLayoutParams.setMargins((layout_width / 4) - button_size / 2, 0, 0, 0);
+        btn_cancel.setLayoutParams(cancleLayoutParams);
         btn_cancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -211,10 +211,10 @@ public class CaptureLayout extends FrameLayout {
 
         //确认按钮
         btn_confirm = new TypeButton(getContext(), TypeButton.TYPE_CONFIRM, button_size);
-        LayoutParams btn_confirm_param = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        btn_confirm_param.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-        btn_confirm_param.setMargins(0, 0, (layout_width / 4) - button_size / 2, 0);
-        btn_confirm.setLayoutParams(btn_confirm_param);
+        LayoutParams btnConfirmParam = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        btnConfirmParam.gravity = Gravity.CENTER_VERTICAL | Gravity.END;
+        btnConfirmParam.setMargins(0, 0, (layout_width / 4) - button_size / 2, 0);
+        btn_confirm.setLayoutParams(btnConfirmParam);
         btn_confirm.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -228,10 +228,10 @@ public class CaptureLayout extends FrameLayout {
 
         //返回按钮
         btn_return = new ReturnButton(getContext(), (int) (button_size / 2.5f));
-        LayoutParams btn_return_param = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        btn_return_param.gravity = Gravity.CENTER_VERTICAL;
-        btn_return_param.setMargins(layout_width / 6, 0, 0, 0);
-        btn_return.setLayoutParams(btn_return_param);
+        LayoutParams btnReturnParam = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        btnReturnParam.gravity = Gravity.CENTER_VERTICAL;
+        btnReturnParam.setMargins(layout_width / 6, 0, 0, 0);
+        btn_return.setLayoutParams(btnReturnParam);
         btn_return.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -242,10 +242,11 @@ public class CaptureLayout extends FrameLayout {
         });
         //左边自定义按钮
         iv_custom_left = new ImageView(getContext());
-        LayoutParams iv_custom_param_left = new LayoutParams((int) (button_size / 2.5f), (int) (button_size / 2.5f));
-        iv_custom_param_left.gravity = Gravity.CENTER_VERTICAL;
-        iv_custom_param_left.setMargins(layout_width / 6, 0, 0, 0);
-        iv_custom_left.setLayoutParams(iv_custom_param_left);
+        LayoutParams ivCustomParamLeft = new LayoutParams((int) (button_size / 2.5f), (int) (button_size / 2.5f));
+        ivCustomParamLeft.gravity = Gravity.CENTER_VERTICAL;
+
+        ivCustomParamLeft.setMargins(layout_width / 6, 0, 0, 0);
+        iv_custom_left.setLayoutParams(ivCustomParamLeft);
         iv_custom_left.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -257,10 +258,10 @@ public class CaptureLayout extends FrameLayout {
 
         //右边自定义按钮
         iv_custom_right = new ImageView(getContext());
-        LayoutParams iv_custom_param_right = new LayoutParams((int) (button_size / 2.5f), (int) (button_size / 2.5f));
-        iv_custom_param_right.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-        iv_custom_param_right.setMargins(0, 0, layout_width / 6, 0);
-        iv_custom_right.setLayoutParams(iv_custom_param_right);
+        LayoutParams ivCustomParamRight = new LayoutParams((int) (button_size / 2.5f), (int) (button_size / 2.5f));
+        ivCustomParamRight.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+        ivCustomParamRight.setMargins(0, 0, layout_width / 6, 0);
+        iv_custom_right.setLayoutParams(ivCustomParamRight);
         iv_custom_right.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -271,13 +272,13 @@ public class CaptureLayout extends FrameLayout {
         });
 
         txt_tip = new TextView(getContext());
-        LayoutParams txt_param = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        txt_param.gravity = Gravity.CENTER_HORIZONTAL;
-        txt_param.setMargins(0, 0, 0, 0);
+        LayoutParams txtParam = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        txtParam.gravity = Gravity.CENTER_HORIZONTAL;
+        txtParam.setMargins(0, 0, 0, 0);
         txt_tip.setText("轻触拍照，长按摄像");
         txt_tip.setTextColor(0xFFFFFFFF);
         txt_tip.setGravity(Gravity.CENTER);
-        txt_tip.setLayoutParams(txt_param);
+        txt_tip.setLayoutParams(txtParam);
 
         this.addView(btn_capture);
         this.addView(btn_cancel);
@@ -308,18 +309,18 @@ public class CaptureLayout extends FrameLayout {
 
     public void startAlphaAnimation() {
         if (isFirst) {
-            ObjectAnimator animator_txt_tip = ObjectAnimator.ofFloat(txt_tip, "alpha", 1f, 0f);
-            animator_txt_tip.setDuration(500);
-            animator_txt_tip.start();
+            ObjectAnimator animatorTxtTip = ObjectAnimator.ofFloat(txt_tip, "alpha", 1f, 0f);
+            animatorTxtTip.setDuration(500);
+            animatorTxtTip.start();
             isFirst = false;
         }
     }
 
     public void setTextWithAnimation(String tip) {
         txt_tip.setText(tip);
-        ObjectAnimator animator_txt_tip = ObjectAnimator.ofFloat(txt_tip, "alpha", 0f, 1f, 1f, 0f);
-        animator_txt_tip.setDuration(2500);
-        animator_txt_tip.start();
+        ObjectAnimator animatorTxtTip = ObjectAnimator.ofFloat(txt_tip, "alpha", 0f, 1f, 1f, 0f);
+        animatorTxtTip.setDuration(2500);
+        animatorTxtTip.start();
     }
 
     public void setDuration(int duration) {

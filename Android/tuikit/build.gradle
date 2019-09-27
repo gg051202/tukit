@@ -57,5 +57,7 @@ dependencies {
     // 如果用jcenter方式集成，可以使用以下配置保证获取的是4.x版本的最新版，或者指定某一个版本，比如4.3.81
     //noinspection GradleDependency
     api 'com.tencent.imsdk:imsdk:4.4.716'
+    implementation 'me.jessyan:autosize:1.1.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 }
 

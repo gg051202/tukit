@@ -77,6 +77,7 @@ class PreviewState implements State {
         CameraInterface.getInstance().stopRecord(isShort, new CameraInterface.StopRecordCallback() {
             @Override
             public void recordResult(String url, Bitmap firstFrame) {
+//                BitmapUtils.mirror(BitmapUtils.rotate(firstFrame, 270f));
                 if (isShort) {
                     machine.getView().resetState(JCameraView.TYPE_SHORT);
                 } else {
