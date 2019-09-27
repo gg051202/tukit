@@ -131,7 +131,7 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
         faceBtn.setOnClickListener(this);
         moreBtn = findViewById(R.id.more_btn);
         //guilin changed,always GONE
-        moreBtn.setVisibility(GONE);
+//        moreBtn.setVisibility(GONE);
         findViewById(R.id.voiceLayout).setVisibility(GONE);
 
         moreBtn.setOnClickListener(this);
