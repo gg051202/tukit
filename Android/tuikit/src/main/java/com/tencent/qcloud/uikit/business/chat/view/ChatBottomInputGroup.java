@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.tencent.imsdk.TIMCustomElem;
 import com.tencent.qcloud.uikit.R;
 import com.tencent.qcloud.uikit.TUIKit;
 import com.tencent.qcloud.uikit.business.chat.model.MessageInfo;
@@ -80,6 +81,7 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
      * 文本输入框
      */
     public EditText msgEditor;
+    public ImageView isPushWxImageView;
 
     private ChatActionsFragment actionsFragment;
 
@@ -101,6 +103,7 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
     private int currentState;
     private int lastMsgLineCount;
     private float startRecordY;
+    private boolean isPushWx = true;
 
     private AlertDialog mPermissionDialog;
     private String mPackName = "com.tencent.qcloud.tim.tuikit";
@@ -133,6 +136,9 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
         //guilin changed,always GONE
         moreBtn.setVisibility(GONE);
         findViewById(R.id.voiceLayout).setVisibility(GONE);
+        isPushWxImageView = findViewById(R.id.isPushWxImageView);
+        isPushWxImageView.setOnClickListener(this);
+        findViewById(R.id.hintDescImageView).setOnClickListener(this);
 
         moreBtn.setOnClickListener(this);
         sendBtn = findViewById(R.id.send_btn);
@@ -487,13 +493,20 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
             if (sendAble) {
                 if (msgHandler != null) {
                     MessageInfo msg = MessageInfoUtil.buildTextMessage(msgEditor.getText().toString());
-//                    HashMap<String,Object> customParams = new HashMap<>();
-//                    customParams.put("isPushWx",true);//保存自定义参数，是否推送到了微信模板消息
-                    msg.setcu(String.format("{\"isPushWx\":%s}",true));
+                    TIMCustomElem elem = new TIMCustomElem();
+                    elem.setData(strToByteArray(String.format("{\"notPushWx\":%s}", !isPushWx)));
+                    msg.getTIMMessage().addElement(elem);
+                    msg.getTIMMessage().setCustomStr(String.format("{\"notPushWx\":%s}", !isPushWx));
                     msgHandler.sendMessage(msg);
                 }
                 msgEditor.setText("");
             }
+        } else if (view.getId() == R.id.hintDescImageView) {
+
+        } else if (view.getId() == R.id.isPushWxImageView) {
+            isPushWx = !isPushWx;
+            isPushWxImageView.setImageResource(isPushWx ? R.drawable.a29 : R.drawable.img_zhifu_weixuanze);
+
         }
     }
 
@@ -694,4 +707,12 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
         void cancelRecording();
     }
 
+
+    public static byte[] strToByteArray(String str) {
+        if (str == null) {
+            return null;
+        }
+        byte[] byteArray = str.getBytes();
+        return byteArray;
+    }
 }

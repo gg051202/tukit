@@ -305,15 +305,17 @@ public class ChatAdapter extends IChatAdapter {
                 msgHolder.msg.setVisibility(View.VISIBLE);
 
                 try {
-                    System.out.println(msg.getExtra().toString());
-                    JSONObject jsonObject = new JSONObject(msg.getExtra().toString());
-                    boolean isPushWx = (boolean) jsonObject.get("isPushWx");
-                    if (msg.isSelf() && isPushWx) {
+                    JSONObject jsonObject = new JSONObject(msg.getTIMMessage().getCustomStr());
+                    boolean notPushWx = (boolean) jsonObject.get("notPushWx");
+                    if (msg.isSelf() && !notPushWx) {
                         msgHolder.isPushWx.setVisibility(View.VISIBLE);
                     } else {
                         msgHolder.isPushWx.setVisibility(View.GONE);
                     }
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                    msgHolder.isPushWx.setVisibility(View.GONE);
+                }catch(Exception e){
                     e.printStackTrace();
                     msgHolder.isPushWx.setVisibility(View.GONE);
                 }
