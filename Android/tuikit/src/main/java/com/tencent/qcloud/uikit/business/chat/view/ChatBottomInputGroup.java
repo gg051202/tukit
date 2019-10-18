@@ -20,6 +20,7 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -162,8 +163,13 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
 
         msgEditor.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    sendMessage();
+                    return true;
+                }
                 return false;
+
             }
         });
 
@@ -490,23 +496,34 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
                 currentState = STATE_ACTION_INPUT;
             }
         } else if (view.getId() == R.id.send_btn) {
-            if (sendAble) {
-                if (msgHandler != null) {
-                    MessageInfo msg = MessageInfoUtil.buildTextMessage(msgEditor.getText().toString());
-                    TIMCustomElem elem = new TIMCustomElem();
-                    elem.setData(strToByteArray(String.format("{\"notPushWx\":%s}", !isPushWx)));
-                    msg.getTIMMessage().addElement(elem);
-                    msg.getTIMMessage().setCustomStr(String.format("{\"notPushWx\":%s}", !isPushWx));
-                    msgHandler.sendMessage(msg);
-                }
-                msgEditor.setText("");
-            }
+            sendMessage();
         } else if (view.getId() == R.id.hintDescImageView) {
 
         } else if (view.getId() == R.id.isPushWxImageView) {
             isPushWx = !isPushWx;
             isPushWxImageView.setImageResource(isPushWx ? R.drawable.a29 : R.drawable.img_zhifu_weixuanze);
 
+        }
+    }
+
+    /**
+     * 点击按钮发送消息
+     */
+    public void sendMessage() {
+        if (sendAble) {
+            if (msgHandler != null) {
+
+                MessageInfo msg = MessageInfoUtil.buildTextMessage(msgEditor.getText().toString());
+                TIMCustomElem elem = new TIMCustomElem();
+                elem.setData(strToByteArray(String.format("{\"notPushWx\":%s}", !isPushWx)));
+                msg.getTIMMessage().addElement(elem);
+                msg.getTIMMessage().setCustomStr(String.format("{\"notPushWx\":%s}", !isPushWx));
+                /**
+                 * @see com.tencent.qcloud.uikit.business.chat.c2c.presenter.C2CChatPresenter#sendC2CMessage
+                 */
+                msgHandler.sendMessage(msg);
+            }
+            msgEditor.setText("");
         }
     }
 

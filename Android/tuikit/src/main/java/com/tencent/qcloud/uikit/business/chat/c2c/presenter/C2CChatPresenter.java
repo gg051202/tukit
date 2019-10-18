@@ -1,12 +1,12 @@
 package com.tencent.qcloud.uikit.business.chat.c2c.presenter;
 
-import com.tencent.qcloud.uikit.common.IUIKitCallBack;
 import com.tencent.qcloud.uikit.business.chat.c2c.model.C2CChatInfo;
 import com.tencent.qcloud.uikit.business.chat.c2c.model.C2CChatManager;
 import com.tencent.qcloud.uikit.business.chat.c2c.model.C2CChatProvider;
 import com.tencent.qcloud.uikit.business.chat.c2c.view.C2CChatPanel;
-import com.tencent.qcloud.uikit.common.BackgroundTasks;
 import com.tencent.qcloud.uikit.business.chat.model.MessageInfo;
+import com.tencent.qcloud.uikit.common.BackgroundTasks;
+import com.tencent.qcloud.uikit.common.IUIKitCallBack;
 import com.tencent.qcloud.uikit.common.utils.UIUtils;
 
 import static com.tencent.qcloud.uikit.business.chat.model.MessageInfo.MSG_STATUS_SEND_SUCCESS;
@@ -44,14 +44,14 @@ public class C2CChatPresenter {
     }
 
     public void sendC2CMessage(final MessageInfo message, boolean reSend) {
-        System.out.println("aaa");
+
         mChatManager.sendC2CMessage(message, reSend, new IUIKitCallBack() {
             @Override
             public void onSuccess(Object data) {
                 //监听消息发送成功
                 if (message.getStatus() == MSG_STATUS_SEND_SUCCESS) {
                     if (mChatPanel.getIUIKitSendMessageSuccessCallBack() != null) {
-                        mChatPanel.getIUIKitSendMessageSuccessCallBack().success();
+                        mChatPanel.getIUIKitSendMessageSuccessCallBack().success(message);
                     }
                 }
                 BackgroundTasks.getInstance().runOnUiThread(new Runnable() {

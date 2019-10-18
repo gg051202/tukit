@@ -573,8 +573,6 @@ public class CameraInterface implements Camera.PreviewCallback {
 ////            mediaRecorder.setOrientationHint(90);
 //        }
 
-        System.out.println("SELECTED_CAMERA:" + SELECTED_CAMERA + ",CAMERA_FRONT_POSITION:" + CAMERA_FRONT_POSITION + " cameraAngle:" + cameraAngle + " nowAngle:" + nowAngle);
-
         if (SELECTED_CAMERA == CAMERA_FRONT_POSITION) {
             //手机预览倒立的处理
             if (cameraAngle == 270) {

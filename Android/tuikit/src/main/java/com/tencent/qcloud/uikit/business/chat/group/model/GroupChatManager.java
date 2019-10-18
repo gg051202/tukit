@@ -718,7 +718,6 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
                 mPendencyTime = timGroupPendencyListGetSucc.getMeta().getNextStartTimestamp();
                 List<TIMGroupPendencyItem> pendencies = timGroupPendencyListGetSucc.getPendencies();
                 for (int i = 0; i < pendencies.size(); i++) {
-                    System.out.println("!!!!!!!!!!!!!!!!!" + new String(pendencies.get(i).getAuth()));
                     GroupApplyInfo info = new GroupApplyInfo(pendencies.get(i));
                     info.setStatus(0);
                     mCurrentApplies.add(info);

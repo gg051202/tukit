@@ -45,11 +45,9 @@ import com.tencent.qcloud.uikit.common.component.picture.imageEngine.impl.GlideE
 import com.tencent.qcloud.uikit.common.component.video.VideoViewActivity;
 import com.tencent.qcloud.uikit.common.utils.DateTimeUtil;
 import com.tencent.qcloud.uikit.common.utils.FileUtil;
+import com.tencent.qcloud.uikit.common.utils.MyUtil;
 import com.tencent.qcloud.uikit.common.utils.UIUtils;
 import com.tencent.qcloud.uikit.common.widget.photoview.PhotoViewActivity;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -299,31 +297,16 @@ public class ChatAdapter extends IChatAdapter {
         switch (getItemViewType(position)) {
             case MessageInfo.MSG_TYPE_TEXT:
             case MessageInfo.MSG_TYPE_TEXT + 1:
-
-
                 ChatTextHolder msgHolder = (ChatTextHolder) chatHolder;
                 msgHolder.msg.setVisibility(View.VISIBLE);
 
-                try {
-                    JSONObject jsonObject = new JSONObject(msg.getTIMMessage().getCustomStr());
-                    boolean notPushWx = (boolean) jsonObject.get("notPushWx");
-                    if (msg.isSelf() && !notPushWx) {
-                        msgHolder.isPushWx.setVisibility(View.VISIBLE);
-                    } else {
-                        msgHolder.isPushWx.setVisibility(View.GONE);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    msgHolder.isPushWx.setVisibility(View.GONE);
-                }catch(Exception e){
-                    e.printStackTrace();
-                    msgHolder.isPushWx.setVisibility(View.GONE);
-                }
-
+                msgHolder.isPushWx.setVisibility(MyUtil.isPushWxSuccessfully(msg)?View.VISIBLE:View.GONE);
+                System.out.println("isPushWxSuccessfully："+MyUtil.isPushWxSuccessfully(msg) );
 
                 if (timMsg.getElement(0) instanceof TIMTextElem) {
                     TIMTextElem textElem = (TIMTextElem) timMsg.getElement(0);
                     FaceManager.handlerEmojiText(msgHolder.msg, textElem.getText());
+                    System.out.println(textElem.getText());
                 }
                 if (mRecycleView.getContextSize() != 0) {
                     msgHolder.msg.setTextSize(mRecycleView.getContextSize());
@@ -739,6 +722,11 @@ public class ChatAdapter extends IChatAdapter {
         if (mInterceptor != null)
             mInterceptor.intercept(info);
         return info;
+    }
+
+    @Override
+    public List<MessageInfo> getDataSource() {
+        return mDataSource;
     }
 
     class BaseChatHolder extends RecyclerView.ViewHolder {

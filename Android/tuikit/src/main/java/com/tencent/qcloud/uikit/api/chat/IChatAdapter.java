@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView;
 
 import com.tencent.qcloud.uikit.business.chat.model.MessageInfo;
 
+import java.util.List;
+
 
 public abstract class IChatAdapter extends RecyclerView.Adapter {
     /**
@@ -28,5 +30,7 @@ public abstract class IChatAdapter extends RecyclerView.Adapter {
      * @return MessageInfo
      */
     public abstract MessageInfo getItem(int position);
+
+    public abstract List<MessageInfo> getDataSource();
 }
 

@@ -257,6 +257,13 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
         mAdapter.notifyDataSetChanged(ChatListView.DATA_CHANGE_TYPE_REFRESH, 0);
     }
 
+    public void refreshItem(MessageInfo messageInfo) {
+        int i = mAdapter.getDataSource().indexOf(messageInfo);
+        if (i < mAdapter.getDataSource().size()) {
+            mAdapter.notifyItemChanged(i + 1);
+        }
+    }
+
     private void showItemPopMenu(final int index, final MessageInfo messageInfo, View view) {
         initPopActions(messageInfo);
         int[] location = new int[2];
