@@ -48,6 +48,9 @@ import com.tencent.qcloud.uikit.common.utils.FileUtil;
 import com.tencent.qcloud.uikit.common.utils.UIUtils;
 import com.tencent.qcloud.uikit.common.widget.photoview.PhotoViewActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
@@ -296,8 +299,26 @@ public class ChatAdapter extends IChatAdapter {
         switch (getItemViewType(position)) {
             case MessageInfo.MSG_TYPE_TEXT:
             case MessageInfo.MSG_TYPE_TEXT + 1:
+
+
                 ChatTextHolder msgHolder = (ChatTextHolder) chatHolder;
                 msgHolder.msg.setVisibility(View.VISIBLE);
+
+                try {
+                    System.out.println(msg.getExtra().toString());
+                    JSONObject jsonObject = new JSONObject(msg.getExtra().toString());
+                    boolean isPushWx = (boolean) jsonObject.get("isPushWx");
+                    if (msg.isSelf() && isPushWx) {
+                        msgHolder.isPushWx.setVisibility(View.VISIBLE);
+                    } else {
+                        msgHolder.isPushWx.setVisibility(View.GONE);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    msgHolder.isPushWx.setVisibility(View.GONE);
+                }
+
+
                 if (timMsg.getElement(0) instanceof TIMTextElem) {
                     TIMTextElem textElem = (TIMTextElem) timMsg.getElement(0);
                     FaceManager.handlerEmojiText(msgHolder.msg, textElem.getText());
@@ -747,11 +768,12 @@ public class ChatAdapter extends IChatAdapter {
 
     class ChatTextHolder extends BaseChatHolder {
         private TextView msg;
+        private TextView isPushWx;
 
         public ChatTextHolder(View itemView) {
             super(itemView);
             msg = itemView.findViewById(R.id.tv_user_msg);
-
+            isPushWx = itemView.findViewById(R.id.isPushWx);
         }
     }
 

@@ -32,6 +32,11 @@
         android:clickable="true"
         android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/isPushWx"
+            android:visibility="gone"
+            android:text="已推送"
+            style="@style/isPushWeixinStyle" />
 
         <LinearLayout
             android:id="@+id/ll_content_group"
@@ -91,6 +96,7 @@
                         android:padding="10dp"
                         android:textColor="#fff"
                         android:textSize="15sp" />
+
                 </LinearLayout>
 
             </LinearLayout>

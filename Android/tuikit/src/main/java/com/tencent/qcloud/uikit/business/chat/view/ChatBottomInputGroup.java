@@ -485,8 +485,13 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
             }
         } else if (view.getId() == R.id.send_btn) {
             if (sendAble) {
-                if (msgHandler != null)
-                    msgHandler.sendMessage(MessageInfoUtil.buildTextMessage(msgEditor.getText().toString()));
+                if (msgHandler != null) {
+                    MessageInfo msg = MessageInfoUtil.buildTextMessage(msgEditor.getText().toString());
+//                    HashMap<String,Object> customParams = new HashMap<>();
+//                    customParams.put("isPushWx",true);//保存自定义参数，是否推送到了微信模板消息
+                    msg.setcu(String.format("{\"isPushWx\":%s}",true));
+                    msgHandler.sendMessage(msg);
+                }
                 msgEditor.setText("");
             }
         }
