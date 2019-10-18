@@ -21,6 +21,7 @@ import com.tencent.imsdk.TIMMessage;
 import com.tencent.imsdk.TIMMessageListener;
 import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.imsdk.ext.group.TIMGroupDetailInfo;
+import com.tencent.imsdk.ext.group.TIMGroupDetailInfoResult;
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt;
 import com.tencent.imsdk.ext.group.TIMGroupMemberResult;
 import com.tencent.imsdk.ext.group.TIMGroupPendencyGetParam;
@@ -377,21 +378,22 @@ public class GroupChatManager implements TIMMessageListener, UIKitMessageRevoked
     public void getGroupRemote(String groupId, final IUIKitCallBack callBack) {
         List<String> groupList = new ArrayList<>();
         groupList.add(groupId);
-        TIMGroupManager.getInstance().getGroupInfo(groupList, new TIMValueCallBack<List<TIMGroupDetailInfo>>() {
+        TIMGroupManager.getInstance().getGroupInfo(groupList, new TIMValueCallBack<List<TIMGroupDetailInfoResult>>() {
             @Override
-            public void onError(final int code, final String desc) {
+            public void onError(int code, String desc) {
                 QLog.e(TAG, "getGroupPublicInfo failed, code: " + code + "|desc: " + desc);
                 callBack.onError(TAG, code, desc);
             }
 
             @Override
-            public void onSuccess(final List<TIMGroupDetailInfo> timGroupDetailInfos) {
-                if (timGroupDetailInfos.size() > 0) {
-                    TIMGroupDetailInfo info = timGroupDetailInfos.get(0);
+            public void onSuccess(List<TIMGroupDetailInfoResult> timGroupDetailInfoResults) {
+                if (!timGroupDetailInfoResults.isEmpty()) {
+                    TIMGroupDetailInfo info = timGroupDetailInfoResults.get(0);
                     QLog.i(TAG, info.toString());
                     callBack.onSuccess(info);
                 }
             }
+
         });
     }
 
