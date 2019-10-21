@@ -62,6 +62,11 @@ public class C2CChatPanel extends ChatPanel implements IChatPanel {
     }
 
     @Override
+    protected void showPushHint() {
+        mPresenter.mChatPanel.mIUIKitSendMessageSuccessCallBack.showPushHint();
+    }
+
+    @Override
     public void loadMessages() {
         mPresenter.loadChatMessages(mAdapter.getItemCount() > 0 ? mAdapter.getItem(1) : null);
     }
@@ -132,5 +137,11 @@ public class C2CChatPanel extends ChatPanel implements IChatPanel {
 
     public C2CChatInfo getBaseInfo() {
         return mBaseInfo;
+    }
+
+    protected void showItemPopMenu(final int index, final MessageInfo messageInfo, View view) {
+        if(mIUIKitSendMessageSuccessCallBack!=null){
+            mIUIKitSendMessageSuccessCallBack.onMessageLongClick(index, messageInfo, view);
+        }
     }
 }

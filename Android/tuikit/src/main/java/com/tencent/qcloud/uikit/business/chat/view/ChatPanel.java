@@ -21,12 +21,12 @@ import com.tencent.qcloud.uikit.R;
 import com.tencent.qcloud.uikit.api.chat.IChatAdapter;
 import com.tencent.qcloud.uikit.api.chat.IChatPanel;
 import com.tencent.qcloud.uikit.api.chat.IChatProvider;
-import com.tencent.qcloud.uikit.common.component.action.PopMenuAdapter;
-import com.tencent.qcloud.uikit.common.component.action.PopMenuAction;
 import com.tencent.qcloud.uikit.business.chat.model.MessageInfo;
 import com.tencent.qcloud.uikit.business.chat.view.widget.ChatAdapter;
-import com.tencent.qcloud.uikit.business.chat.view.widget.MessageOperaUnit;
 import com.tencent.qcloud.uikit.business.chat.view.widget.ChatListEvent;
+import com.tencent.qcloud.uikit.business.chat.view.widget.MessageOperaUnit;
+import com.tencent.qcloud.uikit.common.component.action.PopMenuAction;
+import com.tencent.qcloud.uikit.common.component.action.PopMenuAdapter;
 import com.tencent.qcloud.uikit.common.component.titlebar.PageTitleBar;
 import com.tencent.qcloud.uikit.common.utils.PopWindowUtil;
 import com.tencent.qcloud.uikit.common.utils.UIUtils;
@@ -264,7 +264,7 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
         }
     }
 
-    private void showItemPopMenu(final int index, final MessageInfo messageInfo, View view) {
+    protected void showItemPopMenu(final int index, final MessageInfo messageInfo, View view) {
         initPopActions(messageInfo);
         int[] location = new int[2];
         view.getLocationOnScreen(location);
@@ -293,6 +293,7 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
         if (locationY < 50)
             locationY = locationY + viewHeight + parentViewHeight;
         mPopWindow = PopWindowUtil.popupWindow(itemPop, this, (int) locationX, (int) locationY);
+
         postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -301,6 +302,7 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
                 }
             }
         }, 6000); // 6s后无操作自动消失
+
     }
 
     @Override
@@ -309,6 +311,11 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
             @Override
             public void sendMessage(MessageInfo msg) {
                 ChatPanel.this.sendMessage(msg);
+            }
+
+            @Override
+            public void showPushHint() {
+               ChatPanel.this. showPushHint();
             }
         });
     }
@@ -357,6 +364,8 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
     }
 
     protected abstract void sendMessage(MessageInfo messageInfo);
+
+    protected abstract void showPushHint();
 
     protected abstract void loadMessages();
 

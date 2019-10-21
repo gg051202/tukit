@@ -1,5 +1,7 @@
 package com.tencent.qcloud.uikit.common;
 
+import android.view.View;
+
 import com.tencent.qcloud.uikit.business.chat.model.MessageInfo;
 
 /**
@@ -8,4 +10,8 @@ import com.tencent.qcloud.uikit.business.chat.model.MessageInfo;
  */
 public interface IUIKitSendMessageSuccessCallBack {
     void success(MessageInfo message);
+
+    void showPushHint();
+
+    void onMessageLongClick(final int index, final MessageInfo messageInfo, View view);
 }

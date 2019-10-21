@@ -498,7 +498,7 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
         } else if (view.getId() == R.id.send_btn) {
             sendMessage();
         } else if (view.getId() == R.id.hintDescImageView) {
-
+            msgHandler.showPushHint();
         } else if (view.getId() == R.id.isPushWxImageView) {
             isPushWx = !isPushWx;
             isPushWxImageView.setImageResource(isPushWx ? R.drawable.a29 : R.drawable.img_zhifu_weixuanze);
@@ -707,6 +707,8 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
 
     public interface MessageHandler {
         void sendMessage(MessageInfo msg);
+
+        void showPushHint();
     }
 
     public interface ChatInputHandler {

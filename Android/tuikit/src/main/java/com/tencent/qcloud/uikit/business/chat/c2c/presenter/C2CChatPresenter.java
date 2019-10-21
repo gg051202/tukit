@@ -14,7 +14,7 @@ import static com.tencent.qcloud.uikit.business.chat.model.MessageInfo.MSG_STATU
 
 public class C2CChatPresenter {
 
-    private C2CChatPanel mChatPanel;
+    public C2CChatPanel mChatPanel;
     private C2CChatManager mChatManager;
 
     public C2CChatPresenter(C2CChatPanel chatPanel) {

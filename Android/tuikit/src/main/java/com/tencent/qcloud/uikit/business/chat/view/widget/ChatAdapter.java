@@ -301,12 +301,10 @@ public class ChatAdapter extends IChatAdapter {
                 msgHolder.msg.setVisibility(View.VISIBLE);
 
                 msgHolder.isPushWx.setVisibility(MyUtil.isPushWxSuccessfully(msg)?View.VISIBLE:View.GONE);
-                System.out.println("isPushWxSuccessfully："+MyUtil.isPushWxSuccessfully(msg) );
 
                 if (timMsg.getElement(0) instanceof TIMTextElem) {
                     TIMTextElem textElem = (TIMTextElem) timMsg.getElement(0);
                     FaceManager.handlerEmojiText(msgHolder.msg, textElem.getText());
-                    System.out.println(textElem.getText());
                 }
                 if (mRecycleView.getContextSize() != 0) {
                     msgHolder.msg.setTextSize(mRecycleView.getContextSize());

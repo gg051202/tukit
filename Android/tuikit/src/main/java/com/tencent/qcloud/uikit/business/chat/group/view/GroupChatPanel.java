@@ -107,6 +107,11 @@ public class GroupChatPanel extends ChatPanel implements IChatPanel {
     }
 
     @Override
+    protected void showPushHint() {
+
+    }
+
+    @Override
     public void loadMessages() {
         mPresenter.loadChatMessages(mAdapter.getItemCount() > 0 ? mAdapter.getItem(1) : null);
     }
