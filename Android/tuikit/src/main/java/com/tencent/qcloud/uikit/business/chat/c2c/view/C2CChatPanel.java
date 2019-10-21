@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.tencent.qcloud.uikit.R;
 import com.tencent.qcloud.uikit.api.chat.IChatPanel;
 import com.tencent.qcloud.uikit.business.chat.c2c.model.C2CChatInfo;
 import com.tencent.qcloud.uikit.business.chat.c2c.model.C2CChatManager;
@@ -38,6 +39,20 @@ public class C2CChatPanel extends ChatPanel implements IChatPanel {
 
     public C2CChatPanel(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        mEditPushTextView = findViewById(R.id.editPushTextView);
+        mEditPushTextView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mIUIKitSendMessageSuccessCallBack != null) {
+                    mIUIKitSendMessageSuccessCallBack.editPush();
+                }
+            }
+        });
     }
 
     public void setBaseChatId(String chatId) {
@@ -140,7 +155,7 @@ public class C2CChatPanel extends ChatPanel implements IChatPanel {
     }
 
     protected void showItemPopMenu(final int index, final MessageInfo messageInfo, View view) {
-        if(mIUIKitSendMessageSuccessCallBack!=null){
+        if (mIUIKitSendMessageSuccessCallBack != null) {
             mIUIKitSendMessageSuccessCallBack.onMessageLongClick(index, messageInfo, view);
         }
     }

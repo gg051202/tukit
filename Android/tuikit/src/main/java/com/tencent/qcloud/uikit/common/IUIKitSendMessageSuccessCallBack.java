@@ -14,4 +14,9 @@ public interface IUIKitSendMessageSuccessCallBack {
     void showPushHint();
 
     void onMessageLongClick(final int index, final MessageInfo messageInfo, View view);
+
+    /**
+     * 点击顶部的批量推送按钮
+     */
+    void editPush();
 }

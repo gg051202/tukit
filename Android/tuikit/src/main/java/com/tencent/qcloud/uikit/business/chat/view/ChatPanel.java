@@ -41,6 +41,7 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
     protected ChatListView mChatList;
     protected IChatAdapter mAdapter;
     public ChatBottomInputGroup mInputGroup;
+    public View mEditPushTextView;
     protected ListView mItemPopMenuList;
 
     /**
@@ -75,7 +76,7 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
     }
 
 
-    private void init() {
+    protected void init() {
         inflate(getContext(), R.layout.chat_panel, this);
         mTitleBar = findViewById(R.id.chat_page_title);
         mChatList = findViewById(R.id.chat_list);
@@ -150,6 +151,7 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
 
         mChatList.setAdapter(mAdapter);
     }
+
 
     private ChatBottomInputGroup.ChatInputHandler mChatInputHandler = new ChatBottomInputGroup.ChatInputHandler() {
         @Override

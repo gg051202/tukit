@@ -49,7 +49,7 @@ public class GroupChatPanel extends ChatPanel implements IChatPanel {
         init();
     }
 
-    private void init() {
+    protected void init() {
         mTipsGroup.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
