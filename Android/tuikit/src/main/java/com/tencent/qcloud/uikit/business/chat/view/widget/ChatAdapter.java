@@ -300,7 +300,9 @@ public class ChatAdapter extends IChatAdapter {
                 ChatTextHolder msgHolder = (ChatTextHolder) chatHolder;
                 msgHolder.msg.setVisibility(View.VISIBLE);
 
-                msgHolder.isPushWx.setVisibility(MyUtil.isPushWxSuccessfully(msg)?View.VISIBLE:View.GONE);
+                if(msgHolder.isPushWx!=null){
+                    msgHolder.isPushWx.setVisibility(MyUtil.isPushWxSuccessfully(msg)?View.VISIBLE:View.GONE);
+                }
 
                 if (timMsg.getElement(0) instanceof TIMTextElem) {
                     TIMTextElem textElem = (TIMTextElem) timMsg.getElement(0);

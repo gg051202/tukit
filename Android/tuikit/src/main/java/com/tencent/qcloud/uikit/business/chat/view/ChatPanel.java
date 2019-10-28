@@ -3,7 +3,9 @@ package com.tencent.qcloud.uikit.business.chat.view;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -80,6 +82,7 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
         inflate(getContext(), R.layout.chat_panel, this);
         mTitleBar = findViewById(R.id.chat_page_title);
         mChatList = findViewById(R.id.chat_list);
+        mChatList.addItemDecoration(new FirstItemVerticalMarginDecoration(getContext(), 80));
         mChatList.setMLoadMoreHandler(new ChatListView.OnLoadMoreHandler() {
             @Override
             public void loadMore() {
@@ -317,7 +320,7 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
 
             @Override
             public void showPushHint() {
-               ChatPanel.this. showPushHint();
+                ChatPanel.this.showPushHint();
             }
         });
     }
@@ -382,5 +385,37 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
 
     public void setOnUserIconClickListener(OnUserIconClickListener l) {
         mOnUserIconClickListener = l;
+    }
+
+    public void setLeftTimes(Integer leftTimes) {
+        mInputGroup.setLeftTimes(leftTimes);
+    }
+
+
+    public class FirstItemVerticalMarginDecoration extends RecyclerView.ItemDecoration {
+        private int spaceStart;
+        private int spaceEnd;
+
+        public FirstItemVerticalMarginDecoration(Context context, int spaceStartDp) {
+            this.spaceStart = SizeUtils.dp2px(context, spaceStartDp);
+        }
+
+//        public FirstItemVerticalMarginDecoration(int spaceStartDp, int spaceEndDp) {
+//            this.spaceStart = AutoSizeTool.dp2px(spaceStartDp);
+//            this.spaceEnd = AutoSizeTool.dp2px(spaceEndDp);
+//        }
+
+        @Override
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            if (parent.getChildAdapterPosition(view) == 0) {
+                outRect.top = spaceStart;
+            }
+            if (parent.getAdapter() != null) {
+                if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1) {
+                    outRect.bottom = spaceEnd;
+                }
+            }
+        }
     }
 }

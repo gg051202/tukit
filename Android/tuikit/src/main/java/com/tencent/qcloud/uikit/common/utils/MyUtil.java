@@ -1,5 +1,7 @@
 package com.tencent.qcloud.uikit.common.utils;
 
+import android.util.Log;
+
 import com.tencent.qcloud.uikit.business.chat.model.MessageInfo;
 
 import org.json.JSONException;
@@ -11,34 +13,19 @@ import org.json.JSONObject;
  */
 public class MyUtil {
 
-    public static boolean isPushWx(MessageInfo message) {
-        try {
-            JSONObject jsonObject = new JSONObject(message.getTIMMessage().getCustomStr());
-            boolean notPushWx = (boolean) jsonObject.get("notPushWx");
-            if (message.isSelf() && !notPushWx) {
-                return true;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return false;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return false;
-    }
     public static boolean isPushWxSuccessfully(MessageInfo message) {
         try {
+            Log.i("isPushWxSuccessfully", message.getTIMMessage().getCustomStr());
             JSONObject jsonObject = new JSONObject(message.getTIMMessage().getCustomStr());
             boolean isPushWxSuccessfully = (boolean) jsonObject.get("isPushWxSuccessfully");
             if (message.isSelf() && isPushWxSuccessfully) {
                 return true;
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e("isPushWxSuccessfully", e.toString());
             return false;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("isPushWxSuccessfully", e.toString());
             return false;
         }
         return false;

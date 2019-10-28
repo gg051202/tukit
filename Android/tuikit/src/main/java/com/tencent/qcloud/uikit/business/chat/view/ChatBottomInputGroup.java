@@ -78,6 +78,7 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
      * 语音长按按钮
      */
     public Button voiceBtn;
+    public TextView leftTimesTextView;
     /**
      * 文本输入框
      */
@@ -104,10 +105,11 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
     private int currentState;
     private int lastMsgLineCount;
     private float startRecordY;
-    private boolean isPushWx = true;
+    public boolean isPushWx = true;
 
     private AlertDialog mPermissionDialog;
     private String mPackName = "com.tencent.qcloud.tim.tuikit";
+    private Integer mLeftTimes;
 
     public ChatBottomInputGroup(Context context) {
         super(context);
@@ -129,6 +131,7 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
         inflate(getContext(), R.layout.chat_bottom_group, this);
         moreGroup = findViewById(R.id.more_groups);
         voiceBtn = findViewById(R.id.chat_voice_input);
+        leftTimesTextView = findViewById(R.id.leftTimesTextView);
         switchBtn = findViewById(R.id.voice_input_switch);
         switchBtn.setOnClickListener(this);
         faceBtn = findViewById(R.id.face_btn);
@@ -500,6 +503,10 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
         } else if (view.getId() == R.id.hintDescImageView) {
             msgHandler.showPushHint();
         } else if (view.getId() == R.id.isPushWxImageView) {
+            if (mLeftTimes <= 0) {
+                UIUtils.toastLongMessage("可用推送次数为0");
+                return;
+            }
             isPushWx = !isPushWx;
             isPushWxImageView.setImageResource(isPushWx ? R.drawable.a29 : R.drawable.img_zhifu_weixuanze);
 
@@ -515,9 +522,9 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
 
                 MessageInfo msg = MessageInfoUtil.buildTextMessage(msgEditor.getText().toString());
                 TIMCustomElem elem = new TIMCustomElem();
-                elem.setData(strToByteArray(String.format("{\"notPushWx\":%s}", !isPushWx)));
+                elem.setData(strToByteArray(String.format("{\"notPushWx\":%s}", true)));
                 msg.getTIMMessage().addElement(elem);
-                msg.getTIMMessage().setCustomStr(String.format("{\"notPushWx\":%s}", !isPushWx));
+                msg.getTIMMessage().setCustomStr(String.format("{\"notPushWx\":%s}", true));
                 /**
                  * @see com.tencent.qcloud.uikit.business.chat.c2c.presenter.C2CChatPresenter#sendC2CMessage
                  */
@@ -733,5 +740,18 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
         }
         byte[] byteArray = str.getBytes();
         return byteArray;
+    }
+
+    public void setLeftTimes(Integer leftTimes) {
+        mLeftTimes = leftTimes;
+        leftTimesTextView.setText(String.format("剩余次数 %s", leftTimes));
+        if (leftTimes <= 0) {
+            isPushWxImageView.setImageResource(R.drawable.img_zhifu_weixuanze);
+            isPushWx = false;
+        } else {
+            //默认也是不勾
+            isPushWxImageView.setImageResource(R.drawable.img_zhifu_weixuanze);
+            isPushWx = false;
+        }
     }
 }

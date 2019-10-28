@@ -22,6 +22,16 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" />
 
+    <com.tencent.qcloud.uikit.business.chat.view.ChatListView
+        android:id="@+id/chat_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/chat_bottom_box"
+        android:layout_below="@id/chat_page_title"
+        android:layout_weight="1"
+        android:clickable="false"
+        android:descendantFocusability="blocksDescendants" />
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/pushLayout"
         android:layout_width="match_parent"
@@ -59,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
             android:text="编辑"
-            android:textColor="#AC5BB5"
+            android:textColor="#b0AC5BB5"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -73,17 +83,6 @@
 
     </android.support.constraint.ConstraintLayout>
 
-
-    <com.tencent.qcloud.uikit.business.chat.view.ChatListView
-        android:id="@+id/chat_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/chat_bottom_box"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/pushLayout"
-        android:layout_weight="1"
-        android:clickable="false"
-        android:descendantFocusability="blocksDescendants" />
 
 
     <LinearLayout
