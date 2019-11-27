@@ -416,6 +416,8 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
                     outRect.bottom = spaceEnd;
                 }
             }
+
+
         }
     }
 }

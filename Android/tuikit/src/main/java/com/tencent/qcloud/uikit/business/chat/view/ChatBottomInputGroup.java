@@ -503,7 +503,7 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
         } else if (view.getId() == R.id.hintDescImageView) {
             msgHandler.showPushHint();
         } else if (view.getId() == R.id.isPushWxImageView) {
-            if (mLeftTimes <= 0) {
+            if (mLeftTimes == null || mLeftTimes <= 0) {
                 UIUtils.toastLongMessage("可用推送次数为0");
                 return;
             }
@@ -684,7 +684,7 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
 
     @Override
     public void afterTextChanged(Editable s) {
-        if (s.length() > TUIKit.getBaseConfigs().getMaxInputTextLength()) {
+        if (TUIKit.getBaseConfigs() == null || s.length() > TUIKit.getBaseConfigs().getMaxInputTextLength()) {
             msgEditor.setText(s.subSequence(1, s.length()));
             UIUtils.toastLongMessage("已达最大消息长度");
             return;
