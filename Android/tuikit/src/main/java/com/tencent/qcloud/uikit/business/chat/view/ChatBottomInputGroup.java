@@ -684,7 +684,10 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
 
     @Override
     public void afterTextChanged(Editable s) {
-        if (TUIKit.getBaseConfigs() == null || s.length() > TUIKit.getBaseConfigs().getMaxInputTextLength()) {
+        if (TUIKit.getBaseConfigs() == null) {
+            return;
+        }
+        if (s.length() > TUIKit.getBaseConfigs().getMaxInputTextLength()) {
             msgEditor.setText(s.subSequence(1, s.length()));
             UIUtils.toastLongMessage("已达最大消息长度");
             return;
