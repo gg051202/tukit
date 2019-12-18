@@ -82,7 +82,7 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
         inflate(getContext(), R.layout.chat_panel, this);
         mTitleBar = findViewById(R.id.chat_page_title);
         mChatList = findViewById(R.id.chat_list);
-        mChatList.addItemDecoration(new FirstItemVerticalMarginDecoration(getContext(), 80));
+        mChatList.addItemDecoration(new VerticalMarginDecoration(getContext(), 80));
         mChatList.setMLoadMoreHandler(new ChatListView.OnLoadMoreHandler() {
             @Override
             public void loadMore() {
@@ -392,11 +392,11 @@ public abstract class ChatPanel extends LinearLayout implements IChatPanel {
     }
 
 
-    public class FirstItemVerticalMarginDecoration extends RecyclerView.ItemDecoration {
+    public class VerticalMarginDecoration extends RecyclerView.ItemDecoration {
         private int spaceStart;
         private int spaceEnd;
 
-        public FirstItemVerticalMarginDecoration(Context context, int spaceStartDp) {
+        public VerticalMarginDecoration(Context context, int spaceStartDp) {
             this.spaceStart = SizeUtils.dp2px(context, spaceStartDp);
         }
 

@@ -15,10 +15,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.tencent.qcloud.uikit.R;
 import com.tencent.qcloud.uikit.common.component.video.listener.CaptureListener;
 import com.tencent.qcloud.uikit.common.component.video.listener.ClickListener;
 import com.tencent.qcloud.uikit.common.component.video.listener.ReturnListener;
 import com.tencent.qcloud.uikit.common.component.video.listener.TypeListener;
+
+import me.jessyan.autosize.utils.AutoSizeUtils;
 
 
 /**
@@ -53,7 +56,7 @@ public class CaptureLayout extends FrameLayout {
     private CaptureButton btn_capture;      //拍照按钮
     private TypeButton btn_confirm;         //确认按钮
     private TypeButton btn_cancel;          //取消按钮
-    private ReturnButton btn_return;        //返回按钮
+    private ImageView btn_return;        //返回按钮
     private ImageView iv_custom_left;            //左边自定义按钮
     private ImageView iv_custom_right;            //右边自定义按钮
     private TextView txt_tip;               //提示文本
@@ -227,8 +230,12 @@ public class CaptureLayout extends FrameLayout {
         });
 
         //返回按钮
-        btn_return = new ReturnButton(getContext(), (int) (button_size / 2.5f));
-        LayoutParams btnReturnParam = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        btn_return = new ImageView(getContext());
+        int dp50 = AutoSizeUtils.dp2px(getContext(), 50);
+        int dp11 = AutoSizeUtils.dp2px(getContext(), 11);
+        LayoutParams btnReturnParam = new LayoutParams(dp50, dp50);
+        btn_return.setPadding(dp11, dp11, dp11, dp11);
+        btn_return.setImageResource(R.drawable.arrow_down_white);
         btnReturnParam.gravity = Gravity.CENTER_VERTICAL;
         btnReturnParam.setMargins(layout_width / 6, 0, 0, 0);
         btn_return.setLayoutParams(btnReturnParam);
@@ -242,9 +249,8 @@ public class CaptureLayout extends FrameLayout {
         });
         //左边自定义按钮
         iv_custom_left = new ImageView(getContext());
-        LayoutParams ivCustomParamLeft = new LayoutParams((int) (button_size / 2.5f), (int) (button_size / 2.5f));
+        LayoutParams ivCustomParamLeft = new LayoutParams(dp50, dp50);
         ivCustomParamLeft.gravity = Gravity.CENTER_VERTICAL;
-
         ivCustomParamLeft.setMargins(layout_width / 6, 0, 0, 0);
         iv_custom_left.setLayoutParams(ivCustomParamLeft);
         iv_custom_left.setOnClickListener(new OnClickListener() {
@@ -258,8 +264,10 @@ public class CaptureLayout extends FrameLayout {
 
         //右边自定义按钮
         iv_custom_right = new ImageView(getContext());
-        LayoutParams ivCustomParamRight = new LayoutParams((int) (button_size / 2.5f), (int) (button_size / 2.5f));
+        LayoutParams ivCustomParamRight = new LayoutParams(dp50, dp50);
         ivCustomParamRight.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+        int dp8 = AutoSizeUtils.dp2px(getContext(), 7);
+        iv_custom_right.setPadding(dp8, dp8, dp8, dp8);
         ivCustomParamRight.setMargins(0, 0, layout_width / 6, 0);
         iv_custom_right.setLayoutParams(ivCustomParamRight);
         iv_custom_right.setOnClickListener(new OnClickListener() {

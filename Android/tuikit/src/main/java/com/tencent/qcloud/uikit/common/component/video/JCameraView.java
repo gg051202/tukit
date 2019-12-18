@@ -544,6 +544,10 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
         this.mRightClickListener = clickListener;
     }
 
+    public void callRightClickListener() {
+        this.mRightClickListener.onClick();
+    }
+
     private void setFlashRes() {
         switch (TYPE_FLASH_OFF) {
             case TYPE_FLASH_AUTO:
