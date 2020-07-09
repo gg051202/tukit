@@ -42,10 +42,8 @@ public class PojoApplication extends Application {
              */
             long current = System.currentTimeMillis();
             TUIKit.init(this, Constants.SDKAPPID, BaseUIKitConfigs.getDefaultConfigs());
-            System.out.println(">>>>>>>>>>>>>>>>>>"+(System.currentTimeMillis()-current));
             //添加自定初始化配置
             customConfig();
-            System.out.println(">>>>>>>>>>>>>>>>>>"+(System.currentTimeMillis()-current));
 
             if(IMFunc.isBrandXiaoMi()){
                 // 小米离线推送

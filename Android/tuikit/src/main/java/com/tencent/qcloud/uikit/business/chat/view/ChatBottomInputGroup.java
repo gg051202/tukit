@@ -508,7 +508,7 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
                 return;
             }
             isPushWx = !isPushWx;
-            isPushWxImageView.setImageResource(isPushWx ? R.drawable.a29 : R.drawable.img_zhifu_weixuanze);
+            isPushWxImageView.setImageResource(isPushWx ? R.drawable.a29 : R.drawable.a29w);
 
         }
     }
@@ -749,11 +749,11 @@ public class ChatBottomInputGroup extends LinearLayout implements View.OnClickLi
         mLeftTimes = leftTimes;
         leftTimesTextView.setText(String.format("剩余次数 %s", leftTimes));
         if (leftTimes <= 0) {
-            isPushWxImageView.setImageResource(R.drawable.img_zhifu_weixuanze);
+            isPushWxImageView.setImageResource(R.drawable.a29w);
             isPushWx = false;
         } else {
             //默认也是不勾
-            isPushWxImageView.setImageResource(R.drawable.img_zhifu_weixuanze);
+            isPushWxImageView.setImageResource(R.drawable.a29w);
             isPushWx = false;
         }
     }

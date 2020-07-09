@@ -100,13 +100,6 @@ public class FileUtil {
         return result;
     }
 
-    public static boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
-    }
 
     public static String getPathFromUri(Uri uri) {
         try {
