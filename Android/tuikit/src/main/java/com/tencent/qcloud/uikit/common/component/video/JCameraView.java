@@ -287,7 +287,9 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         LogUtil.i("JCameraView SurfaceDestroyed");
+        holder.removeCallback(this);
         CameraInterface.getInstance().doDestroyCamera();
+
     }
 
 
